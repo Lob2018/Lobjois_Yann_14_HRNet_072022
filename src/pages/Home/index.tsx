@@ -141,12 +141,9 @@ function Home() {
 
     // regex for dates as MM/DD/YYYY
     const regexUSDate = /^(0[1-9]|1[0-2])\/(0[1-9]|[12]\d|3[01])\/\d{4}$/
-    // regex for whitespace and accented characters
-    const regexFree = /[a-zA-Z\u00C0-\u017F\s]+/
+    // regex for whitespace and accented characters (a-z A-Z, spaces, hyphens, and ISO Latin1 decimal code 192 à 383)
+    const regexFree = /[a-zA-Z\u00C0-\u017F\s\\-]+/
 
-    console.log(
-      regexUSDate.test(dateOfBirth) + '\n' + regexUSDate.test(startDate)
-    )
     // the joi schema
     const schema = joi.object({
       city: joi
@@ -225,12 +222,10 @@ function Home() {
         dispatch(loadingActions.set(false))
         openModal()
       } catch (e) {
-        console.log('1->' + e)
         checkAccountValidity(false)
         dispatch(loadingActions.set(false))
       }
     } catch (e) {
-      console.log('2->' + e)
       checkAccountValidity(false)
     }
   }
