@@ -89,6 +89,9 @@ const StyledGlobalStyle = createGlobalStyle`
     th span button div div{
       text-transform: capitalize!important; 
     }
+    .MuiTableCell-root{
+      background-color:white;
+    }
 `
 
 function GlobalStyle() {
