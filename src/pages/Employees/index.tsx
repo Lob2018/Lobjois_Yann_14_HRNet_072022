@@ -6,7 +6,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { selectEmployees } from '../../store/selectors'
 import * as employeesActions from '../../features/employees'
 
-import MUIDataTable from 'mui-datatables'
+import MUIDataTable, {MUIDataTableOptions} from 'mui-datatables'
 
 function Employees() {
   const dispatch = useDispatch()
@@ -31,7 +31,7 @@ function Employees() {
     'Zip Code',
   ]
 
-  const options:any = {
+  const options: MUIDataTableOptions = {
     filter: true,
     filterType: 'dropdown',
     responsive: 'standard',

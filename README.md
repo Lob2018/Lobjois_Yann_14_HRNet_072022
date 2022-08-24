@@ -32,4 +32,4 @@ If you are working with several versions of NodeJS, we recommend you install [nv
 
 ### 2.4 Demo
 
-- [HRnet](https://hrnet.netlify.app/)
+- [HRnet](https://hrnet-lob2018.netlify.app/)

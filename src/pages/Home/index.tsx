@@ -15,6 +15,7 @@ import * as employeesActions from '../../features/employees'
 
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
+import Employee from '../../classes/employee.class';
 
 const SectionContainer = styled.section`
   box-sizing: border-box;
@@ -121,7 +122,7 @@ function Home() {
     formState: { errors },
   } = useForm()
 
-  const onSubmit = async (data: Record<string, any>) => {
+  const onSubmit = async (data: Record<string, string>) => {
     const dateOptions: Intl.DateTimeFormatOptions = {
       month: '2-digit',
       day: '2-digit',
@@ -202,17 +203,17 @@ function Home() {
 
     // joi validation
     try {
-      const employee = {
-        firstName: firstName,
-        lastName: lastName,
-        startDate: startDate,
-        department: department,
-        dateOfBirth: dateOfBirth,
-        street: street,
-        city: city,
-        state: state,
-        zipCode: zipCode,
-      }
+      const employee = new Employee (
+         firstName,
+         lastName,
+         startDate,
+         department,
+         dateOfBirth,
+         street,
+         city,
+         state,
+         zipCode,
+      )
       await schema.validateAsync(employee)
       dispatch(loadingActions.set(true))
       // Add the employee
