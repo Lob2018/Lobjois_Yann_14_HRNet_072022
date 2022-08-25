@@ -1,4 +1,4 @@
-import Employee from '../../interfaces/employee.type'
+import Employee from '../../interfaces/employee.interface'
 
 const allEmployees = () => {
   const employees = localStorage.getItem('employees')

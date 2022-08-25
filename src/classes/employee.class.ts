@@ -1,5 +1,6 @@
+import EmployeeInterface from "../interfaces/employee.interface";
 
-class Employee  {
+class Employee implements EmployeeInterface  {
     constructor (
      readonly firstName: string,
      readonly lastName: string,

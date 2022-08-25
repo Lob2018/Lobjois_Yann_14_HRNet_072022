@@ -1,4 +1,4 @@
-import Employee from './employee.type'
+import Employee from './employee.interface'
 
 interface Employees {
   employees: Employee[]

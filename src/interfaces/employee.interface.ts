@@ -1,4 +1,4 @@
-type Employee = {
+interface Employee {
   city: string
   dateOfBirth: string
   department: string
