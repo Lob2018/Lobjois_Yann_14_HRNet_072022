@@ -8,7 +8,7 @@ const { actions, reducer } = createSlice({
   // reducers define actions and the reducer
   reducers: {
     // the set action ('employees/saveEmployee')
-    saveEmployee: (state, action) => {
+    saveEmployee: (_state, action) => {
       return action.payload
     },
   },

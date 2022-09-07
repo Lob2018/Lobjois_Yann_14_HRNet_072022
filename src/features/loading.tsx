@@ -8,7 +8,7 @@ const { actions, reducer } = createSlice({
   // reducers define actions and the reducer
   reducers: {
     // the set action ('loading/set')
-    set: (state, action) => {
+    set: (_state, action) => {
       return action.payload
     },
   },

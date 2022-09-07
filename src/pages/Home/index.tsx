@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import { useForm } from 'react-hook-form'
 import joi from 'joi'
 
-import Modal from 'react-modal';
+import Modal from 'react-modal'
 
 import employeesService from '../../components/services/employees.service'
 
@@ -15,7 +15,10 @@ import * as employeesActions from '../../features/employees'
 
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
-import Employee from '../../classes/employee.class';
+import Employee from '../../classes/employee.class'
+
+import Dropdown from 'react-dropdown-component-library'
+import 'react-dropdown-component-library/dist/style.css'
 
 const SectionContainer = styled.section`
   box-sizing: border-box;
@@ -55,7 +58,7 @@ const StyledAccountError = styled.p`
   font-size: 12px;
   margin: 16px 0 0 0;
 `
-const StyledModalCloseButton=styled.a`
+const StyledModalCloseButton = styled.a`
   position: absolute;
   top: -12.5px;
   right: -12.5px;
@@ -67,14 +70,14 @@ const StyledModalCloseButton=styled.a`
   background-repeat: no-repeat;
   background-position: center center;
   background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAYAAAA6/NlyAAAAAXNSR0IArs4c6QAAA3hJREFUaAXlm8+K00Acx7MiCIJH/yw+gA9g25O49SL4AO3Bp1jw5NvktC+wF88qevK4BU97EmzxUBCEolK/n5gp3W6TTJPfpNPNF37MNsl85/vN/DaTmU6PknC4K+pniqeKJ3k8UnkvDxXJzzy+q/yaxxeVHxW/FNHjgRSeKt4rFoplzaAuHHDBGR2eS9G54reirsmienDCTRt7xwsp+KAoEmt9nLaGitZxrBbPFNaGfPloGw2t4JVamSt8xYW6Dg1oCYo3Yv+rCGViV160oMkcd8SYKnYV1Nb1aEOjCe6L5ZOiLfF120EjWhuBu3YIZt1NQmujnk5F4MgOpURzLfAwOBSTmzp3fpDxuI/pabxpqOoz2r2HLAb0GMbZKlNV5/Hg9XJypguryA7lPF5KMdTZQzHjqxNPhWhzIuAruOl1eNqKEx1tSh5rfbxdw7mOxCq4qS68ZTjKS1YVvilu559vWvFHhh4rZrdyZ69Vmpgdj8fJbDZLJpNJ0uv1cnr/gjrUhQMuI+ANjyuwftQ0bbL6Erp0mM/ny8Fg4M3LtdRxgMtKl3jwmIHVxYXChFy94/Rmpa/pTbNUhstKV+4Rr8lLQ9KlUvJKLyG8yvQ2s9SBy1Jb7jV5a0yapfF6apaZLjLLcWtd4sNrmJUMHyM+1xibTjH82Zh01TNlhsrOhdKTe00uAzZQmN6+KW+sDa/JD2PSVQ873m29yf+1Q9VDzfEYlHi1G5LKBBWZbtEsHbFwb1oYDwr1ZiF/2bnCSg1OBE/pfr9/bWx26UxJL3ONPISOLKUvQza0LZUxSKyjpdTGa/vDEr25rddbMM0Q3O6Lx3rqFvU+x6UrRKQY7tyrZecmD9FODy8uLizTmilwNj0kraNcAJhOp5aGVwsAGD5VmJBrWWbJSgWT9zrzWepQF47RaGSiKfeGx6Szi3gzmX/HHbihwBser4B9UJYpFBNX4R6vTn3VQnez0SymnrHQMsRYGTr1dSk34ljRqS/EMd2pLQ8YBp3a1PLfcqCpo8gtHkZFHKkTX6fs3MY0blKnth66rKCnU0VRGu37ONrQaA4eZDFtWAu2fXj9zjFkxTBOo8F7t926gTp/83Kyzzcy2kZD6xiqxTYnHLRFm3vHiRSwNSjkz3hoIzo8lCKWUlg/YtGs7tObunDAZfpDLbfEI15zsEIY3U/x/gHHc/G1zltnAgAAAABJRU5ErkJggg==');
-  `
-const StyledModalText=styled.div`
-  text-align : left;
+`
+const StyledModalText = styled.div`
+  text-align: left;
 `
 
-const customStyles = {  
-  overlay:{
-    backgroundColor: 'rgba(0,0,0,0.75)',    
+const customStyles = {
+  overlay: {
+    backgroundColor: 'rgba(0,0,0,0.75)',
   },
   content: {
     top: '50%',
@@ -82,28 +85,27 @@ const customStyles = {
     right: 'auto',
     bottom: 'auto',
     marginRight: '-50%',
-    transform: 'translate(-50%, -50%)', 
+    transform: 'translate(-50%, -50%)',
     borderRadius: '8px',
     boxShadow: '0 0 10px #000',
     width: '70%',
-    maxWidth: '500px',    
+    maxWidth: '500px',
     border: 'none',
-    overflow: 'inherit'
-  }
-};
-Modal.setAppElement('#root');
-
+    overflow: 'inherit',
+  },
+}
+Modal.setAppElement('#root')
 
 function Home() {
   const dispatch = useDispatch()
 
   // modal
-  const [modalIsOpen, setIsOpen] = useState(false);
+  const [modalIsOpen, setIsOpen] = useState(false)
   function openModal() {
-    setIsOpen(true);
+    setIsOpen(true)
   }
   function closeModal() {
-    setIsOpen(false);
+    setIsOpen(false)
   }
 
   // datepickers
@@ -203,16 +205,16 @@ function Home() {
 
     // joi validation
     try {
-      const employee = new Employee (
-         firstName,
-         lastName,
-         startDate,
-         department,
-         dateOfBirth,
-         street,
-         city,
-         state,
-         zipCode,
+      const employee = new Employee(
+        firstName,
+        lastName,
+        startDate,
+        department,
+        dateOfBirth,
+        street,
+        city,
+        state,
+        zipCode
       )
       await schema.validateAsync(employee)
       dispatch(loadingActions.set(true))
@@ -305,9 +307,22 @@ function Home() {
             </InputWrapper>
             <InputWrapper>
               <label htmlFor="state">State</label>
-              <input
+              {/* <input
                 type="text"
                 id="state"
+                {...register('state', { required: false, maxLength: 255 })}
+              /> */}
+              <Dropdown
+                labelId="state"
+                defaultValue={{ value: 'Marketing' }}
+                data={[
+                  { value: 'Sales' },
+                  { value: 'Marketing' },
+                  { value: 'Engineering' },
+                  { value: 'Human Resources' },
+                  { value: 'Legal' },
+                ]}
+                messageIfNoData="Pas de données trouvées"
                 {...register('state', { required: false, maxLength: 255 })}
               />
               {errors.state && (
@@ -330,11 +345,24 @@ function Home() {
           </fieldset>
           <InputWrapper>
             <label htmlFor="department">Department</label>
-            <input
+            <Dropdown
+              labelId="department"
+              defaultValue={{ value: 'Marketing' }}
+              data={[
+                { value: 'Sales' },
+                { value: 'Marketing' },
+                { value: 'Engineering' },
+                { value: 'Human Resources' },
+                { value: 'Legal' },
+              ]}
+              messageIfNoData="Pas de données trouvées"
+              {...register('department', { required: false, maxLength: 255 })}
+            />
+            {/* <input
               type="text"
               id="department"
               {...register('department', { required: false, maxLength: 255 })}
-            />
+            /> */}
             {errors.department && (
               <StyledErrors>
                 The department's maximum length is 255.
@@ -349,14 +377,16 @@ function Home() {
           )}
         </form>
         <Modal
-        isOpen={modalIsOpen}
-        onRequestClose={closeModal}
-        style={customStyles}
-        contentLabel="Employee created"         
-      >
-        <StyledModalCloseButton onClick={closeModal}>Close</StyledModalCloseButton>
-        <StyledModalText>Employee created!</StyledModalText>
-      </Modal>
+          isOpen={modalIsOpen}
+          onRequestClose={closeModal}
+          style={customStyles}
+          contentLabel="Employee created"
+        >
+          <StyledModalCloseButton onClick={closeModal}>
+            Close
+          </StyledModalCloseButton>
+          <StyledModalText>Employee created!</StyledModalText>
+        </Modal>
       </SectionContainer>
     </main>
   )
