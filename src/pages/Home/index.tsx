@@ -216,6 +216,7 @@ function Home() {
         state,
         zipCode
       )
+
       await schema.validateAsync(employee)
       dispatch(loadingActions.set(true))
       // Add the employee

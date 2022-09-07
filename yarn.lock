@@ -8102,10 +8102,10 @@
     "loose-envify" "^1.1.0"
     "scheduler" "^0.23.0"
 
-"react-dropdown-component-library@^0.1.1-alpha.3":
-  "integrity" "sha512-+8ZyUxd8KsShYQGko3r6MNwlU7uVJ+bUXxW1TPG829w1ora0HEX15YrTk/d4za5gUoxAIeP+dH8LxncPmRIxzw=="
-  "resolved" "https://registry.npmjs.org/react-dropdown-component-library/-/react-dropdown-component-library-0.1.1-alpha.3.tgz"
-  "version" "0.1.1-alpha.3"
+"react-dropdown-component-library@^0.1.1-alpha.6":
+  "integrity" "sha512-OECJf6qf3Ck94PmXnLYcS19LcJ+1FzlPaD3IzaV3dQl8bnuB7an1J0btnlJT5/xNcnZfPldz2MoCCFNfecE+aA=="
+  "resolved" "https://registry.npmjs.org/react-dropdown-component-library/-/react-dropdown-component-library-0.1.1-alpha.6.tgz"
+  "version" "0.1.1-alpha.6"
 
 "react-error-overlay@^6.0.11":
   "integrity" "sha512-/6UZ2qgEyH2aqzYZgQPxEnz33NJ2gNsnHA2o5+o4wW9bLM/JYQitNP9xPhsXwC08hMMovfGe/8retsdDsczPRg=="

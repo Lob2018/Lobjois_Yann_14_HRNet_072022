@@ -4,7 +4,7 @@ const colors = {
   text: '#2c3e50',
   white: '#FFF',
   black: '#000',
-  green: '#00bc77',
+  green: '#008554',
 }
 
 export default colors
