@@ -28,7 +28,7 @@ function Employees() {
     'Street',
     'City',
     'State',
-    'Zip Code',
+    'Zip Code'
   ]
 
   const options: MUIDataTableOptions = {

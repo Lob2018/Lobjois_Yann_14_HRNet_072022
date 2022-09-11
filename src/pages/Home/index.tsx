@@ -30,6 +30,7 @@ const SectionContainer = styled.section`
     width: calc(100vw / 1.2);
   }
 `
+
 const StyledH1 = styled.h1`
   margin-bottom: 2rem;
 `
@@ -112,6 +113,18 @@ function Home() {
   const [dateOfBirthPicker, setDateOfBirthPicker] = useState(new Date())
   const [startDatePicker, setStartDatePicker] = useState(new Date())
 
+  // state dropdown
+  const [stateValue, setStateValue] = useState('')
+  const handleStateDropdown = (value: string) => {
+    setStateValue(value ? value : '')
+  }
+
+  // department dropdown
+  const [departmentValue, setDepartmentValue] = useState('')
+  const handleDepartmentDropdown = (value: string) => {
+    setDepartmentValue(value ? value : '')
+  }
+
   // message for invalid credentials
   const [isValidAccount, setAccountValidity] = useState(true)
   const checkAccountValidity = (b: boolean) => {
@@ -124,7 +137,18 @@ function Home() {
     formState: { errors },
   } = useForm()
 
+  // regex for dates as MM/DD/YYYY
+  const regexUSDate = new RegExp(/^(0[1-9]|1[0-2])\/(0[1-9]|[12]\d|3[01])\/\d{4}$/)
+  // regex for whitespace and accented characters (a-z A-Z, spaces, hyphens, and ISO Latin1 decimal code 192 à 383)
+  const regexText = new RegExp(/^[a-zA-Z\u00C0-\u017F\s\\-]+$/)
+  // same with numbers
+  const regexTextAndNumbers = new RegExp(/^[a-zA-Z0-9\u00C0-\u017F\s\\-]+$/)
+  // regex for US zip codes as 12345 or 12345-6789
+  const regexUSZipCodes = new RegExp(/^\d{5}(?:-\d{4})?$/)
+
   const onSubmit = async (data: Record<string, string>) => {
+    console.log(errors)
+
     const dateOptions: Intl.DateTimeFormatOptions = {
       month: '2-digit',
       day: '2-digit',
@@ -133,71 +157,66 @@ function Home() {
     const city = data.city || ''
     const dateOfBirth =
       dateOfBirthPicker.toLocaleDateString('en-US', dateOptions) || ''
-    const department = data.department || ''
+    const department = departmentValue || ''
     const firstName = data.firstName || ''
     const lastName = data.lastName || ''
     const startDate =
       startDatePicker.toLocaleDateString('en-US', dateOptions) || ''
-    const state = data.state || ''
+    const state = stateValue || ''
     const street = data.street || ''
     const zipCode = data.zipCode || ''
-
-    // regex for dates as MM/DD/YYYY
-    const regexUSDate = /^(0[1-9]|1[0-2])\/(0[1-9]|[12]\d|3[01])\/\d{4}$/
-    // regex for whitespace and accented characters (a-z A-Z, spaces, hyphens, and ISO Latin1 decimal code 192 à 383)
-    const regexFree = /[a-zA-Z\u00C0-\u017F\s\\-]+/
 
     // the joi schema
     const schema = joi.object({
       city: joi
         .string()
-        .pattern(new RegExp(regexFree))
+        .pattern(regexText)
         .optional()
         .allow(null, '')
         .max(255),
       dateOfBirth: joi
         .string()
-        .pattern(new RegExp(regexUSDate))
+        .pattern(regexUSDate)
         .optional()
         .allow(null, ''),
       department: joi
         .string()
-        .pattern(new RegExp(regexFree))
+        .pattern(regexTextAndNumbers)
         .optional()
         .allow(null, '')
         .max(255),
       firstName: joi
         .string()
-        .pattern(new RegExp(regexFree))
+        .pattern(regexText)
         .optional()
         .allow(null, '')
         .max(255),
       lastName: joi
         .string()
-        .pattern(new RegExp(regexFree))
+        .pattern(regexText)
         .optional()
         .allow(null, '')
         .max(255),
       startDate: joi
         .string()
-        .pattern(new RegExp(regexUSDate))
+        .pattern(regexUSDate)
         .optional()
         .allow(null, ''),
       state: joi
         .string()
-        .pattern(new RegExp(regexFree))
+        .pattern(regexTextAndNumbers)
         .optional()
         .allow(null, '')
         .max(255),
       street: joi
         .string()
-        .pattern(new RegExp(regexFree))
+        .pattern(regexTextAndNumbers)
         .optional()
         .allow(null, '')
         .max(255),
       zipCode: joi
         .string()
-        .pattern(/^[a-zA-Z0-9 ]{1,32}$/)
+        .pattern(regexUSZipCodes)
         .optional()
         .allow(null, '')
         .max(32),
@@ -226,10 +245,14 @@ function Home() {
         dispatch(loadingActions.set(false))
         openModal()
       } catch (e) {
+        console.log('2 : ' + e)
+
         checkAccountValidity(false)
         dispatch(loadingActions.set(false))
       }
     } catch (e) {
+      console.log('1 : ' + e)
+
       checkAccountValidity(false)
     }
   }
@@ -245,11 +268,16 @@ function Home() {
             <input
               type="text"
               id="firstName"
-              {...register('firstName', { required: false, maxLength: 255 })}
+              {...register('firstName', {
+                required: false,
+                maxLength: 255,
+                pattern: regexText,
+              })}
             />
             {errors.firstName && (
               <StyledErrors>
-                The first name's maximum length is 255.
+                The first name's maximum length is 255, and must only contain
+                text.
               </StyledErrors>
             )}
           </InputWrapper>
@@ -258,11 +286,16 @@ function Home() {
             <input
               type="text"
               id="lastName"
-              {...register('lastName', { required: false, maxLength: 255 })}
+              {...register('lastName', {
+                required: false,
+                maxLength: 255,
+                pattern: regexText,
+              })}
             />
             {errors.lastName && (
               <StyledErrors>
-                The last name's maximum length is 255.
+                The last name's maximum length is 255, and must only contain
+                text.
               </StyledErrors>
             )}
           </InputWrapper>
@@ -289,10 +322,17 @@ function Home() {
               <input
                 type="text"
                 id="street"
-                {...register('street', { required: false, maxLength: 255 })}
+                {...register('street', {
+                  required: false,
+                  maxLength: 255,
+                  pattern:regexTextAndNumbers,
+                })}
               />
               {errors.street && (
-                <StyledErrors>The street's maximum length is 255.</StyledErrors>
+                <StyledErrors>
+                  The street's maximum length is 255, and must only contain
+                  text and numbers.
+                </StyledErrors>
               )}
             </InputWrapper>
             <InputWrapper>
@@ -300,30 +340,265 @@ function Home() {
               <input
                 type="text"
                 id="city"
-                {...register('city', { required: false, maxLength: 255 })}
+                {...register('city', {
+                  required: false,
+                  maxLength: 255,
+                  pattern: regexText,
+                })}
               />
               {errors.city && (
-                <StyledErrors>The city's maximum length is 255.</StyledErrors>
+                <StyledErrors>The city's maximum length is 255, and must only contain
+                text.</StyledErrors>
               )}
             </InputWrapper>
             <InputWrapper>
-              <label htmlFor="state">State</label>
-              {/* <input
-                type="text"
-                id="state"
-                {...register('state', { required: false, maxLength: 255 })}
-              /> */}
+              <label id="state">State</label>
               <Dropdown
                 labelId="state"
-                defaultValue={{ value: 'Marketing' }}
+                defaultValue={{
+                  value: 'Alabama',
+                  overrideValue: 'AL',
+                }}
                 data={[
-                  { value: 'Sales' },
-                  { value: 'Marketing' },
-                  { value: 'Engineering' },
-                  { value: 'Human Resources' },
-                  { value: 'Legal' },
+                  {
+                    value: 'Alabama',
+                    overrideValue: 'AL',
+                  },
+                  {
+                    value: 'Alaska',
+                    overrideValue: 'AK',
+                  },
+                  {
+                    value: 'American Samoa',
+                    overrideValue: 'AS',
+                  },
+                  {
+                    value: 'Arizona',
+                    overrideValue: 'AZ',
+                  },
+                  {
+                    value: 'Arkansas',
+                    overrideValue: 'AR',
+                  },
+                  {
+                    value: 'California',
+                    overrideValue: 'CA',
+                  },
+                  {
+                    value: 'Colorado',
+                    overrideValue: 'CO',
+                  },
+                  {
+                    value: 'Connecticut',
+                    overrideValue: 'CT',
+                  },
+                  {
+                    value: 'Delaware',
+                    overrideValue: 'DE',
+                  },
+                  {
+                    value: 'District Of Columbia',
+                    overrideValue: 'DC',
+                  },
+                  {
+                    value: 'Federated States Of Micronesia',
+                    overrideValue: 'FM',
+                  },
+                  {
+                    value: 'Florida',
+                    overrideValue: 'FL',
+                  },
+                  {
+                    value: 'Georgia',
+                    overrideValue: 'GA',
+                  },
+                  {
+                    value: 'Guam',
+                    overrideValue: 'GU',
+                  },
+                  {
+                    value: 'Hawaii',
+                    overrideValue: 'HI',
+                  },
+                  {
+                    value: 'Idaho',
+                    overrideValue: 'ID',
+                  },
+                  {
+                    value: 'Illinois',
+                    overrideValue: 'IL',
+                  },
+                  {
+                    value: 'Indiana',
+                    overrideValue: 'IN',
+                  },
+                  {
+                    value: 'Iowa',
+                    overrideValue: 'IA',
+                  },
+                  {
+                    value: 'Kansas',
+                    overrideValue: 'KS',
+                  },
+                  {
+                    value: 'Kentucky',
+                    overrideValue: 'KY',
+                  },
+                  {
+                    value: 'Louisiana',
+                    overrideValue: 'LA',
+                  },
+                  {
+                    value: 'Maine',
+                    overrideValue: 'ME',
+                  },
+                  {
+                    value: 'Marshall Islands',
+                    overrideValue: 'MH',
+                  },
+                  {
+                    value: 'Maryland',
+                    overrideValue: 'MD',
+                  },
+                  {
+                    value: 'Massachusetts',
+                    overrideValue: 'MA',
+                  },
+                  {
+                    value: 'Michigan',
+                    overrideValue: 'MI',
+                  },
+                  {
+                    value: 'Minnesota',
+                    overrideValue: 'MN',
+                  },
+                  {
+                    value: 'Mississippi',
+                    overrideValue: 'MS',
+                  },
+                  {
+                    value: 'Missouri',
+                    overrideValue: 'MO',
+                  },
+                  {
+                    value: 'Montana',
+                    overrideValue: 'MT',
+                  },
+                  {
+                    value: 'Nebraska',
+                    overrideValue: 'NE',
+                  },
+                  {
+                    value: 'Nevada',
+                    overrideValue: 'NV',
+                  },
+                  {
+                    value: 'New Hampshire',
+                    overrideValue: 'NH',
+                  },
+                  {
+                    value: 'New Jersey',
+                    overrideValue: 'NJ',
+                  },
+                  {
+                    value: 'New Mexico',
+                    overrideValue: 'NM',
+                  },
+                  {
+                    value: 'New York',
+                    overrideValue: 'NY',
+                  },
+                  {
+                    value: 'North Carolina',
+                    overrideValue: 'NC',
+                  },
+                  {
+                    value: 'North Dakota',
+                    overrideValue: 'ND',
+                  },
+                  {
+                    value: 'Northern Mariana Islands',
+                    overrideValue: 'MP',
+                  },
+                  {
+                    value: 'Ohio',
+                    overrideValue: 'OH',
+                  },
+                  {
+                    value: 'Oklahoma',
+                    overrideValue: 'OK',
+                  },
+                  {
+                    value: 'Oregon',
+                    overrideValue: 'OR',
+                  },
+                  {
+                    value: 'Palau',
+                    overrideValue: 'PW',
+                  },
+                  {
+                    value: 'Pennsylvania',
+                    overrideValue: 'PA',
+                  },
+                  {
+                    value: 'Puerto Rico',
+                    overrideValue: 'PR',
+                  },
+                  {
+                    value: 'Rhode Island',
+                    overrideValue: 'RI',
+                  },
+                  {
+                    value: 'South Carolina',
+                    overrideValue: 'SC',
+                  },
+                  {
+                    value: 'South Dakota',
+                    overrideValue: 'SD',
+                  },
+                  {
+                    value: 'Tennessee',
+                    overrideValue: 'TN',
+                  },
+                  {
+                    value: 'Texas',
+                    overrideValue: 'TX',
+                  },
+                  {
+                    value: 'Utah',
+                    overrideValue: 'UT',
+                  },
+                  {
+                    value: 'Vermont',
+                    overrideValue: 'VT',
+                  },
+                  {
+                    value: 'Virgin Islands',
+                    overrideValue: 'VI',
+                  },
+                  {
+                    value: 'Virginia',
+                    overrideValue: 'VA',
+                  },
+                  {
+                    value: 'Washington',
+                    overrideValue: 'WA',
+                  },
+                  {
+                    value: 'West Virginia',
+                    overrideValue: 'WV',
+                  },
+                  {
+                    value: 'Wisconsin',
+                    overrideValue: 'WI',
+                  },
+                  {
+                    value: 'Wyoming',
+                    overrideValue: 'WY',
+                  },
                 ]}
                 messageIfNoData="Pas de données trouvées"
+                liftingDropDownValueUp={handleStateDropdown}
                 {...register('state', { required: false, maxLength: 255 })}
               />
               {errors.state && (
@@ -335,17 +610,21 @@ function Home() {
               <input
                 type="text"
                 id="zipCode"
-                {...register('zipCode', { required: false, maxLength: 32 })}
+                {...register('zipCode', { 
+                  required: false,
+                   maxLength: 32,
+                   pattern: regexUSZipCodes,
+                  })}
               />
               {errors.zipCode && (
                 <StyledErrors>
-                  The zip code's maximum length is 32.
+                  The zip code's maximum length is 32, with the US format (ex. : 12345 or 12345-6789)
                 </StyledErrors>
               )}
             </InputWrapper>{' '}
           </fieldset>
           <InputWrapper>
-            <label htmlFor="department">Department</label>
+            <label id="department">Department</label>
             <Dropdown
               labelId="department"
               defaultValue={{ value: 'Marketing' }}
@@ -357,13 +636,9 @@ function Home() {
                 { value: 'Legal' },
               ]}
               messageIfNoData="Pas de données trouvées"
+              liftingDropDownValueUp={handleDepartmentDropdown}
               {...register('department', { required: false, maxLength: 255 })}
             />
-            {/* <input
-              type="text"
-              id="department"
-              {...register('department', { required: false, maxLength: 255 })}
-            /> */}
             {errors.department && (
               <StyledErrors>
                 The department's maximum length is 255.
