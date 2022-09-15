@@ -1,12 +1,10 @@
-import { Navigate } from 'react-router-dom'
-
 import employeesService from '../../components/services/employees.service'
 
 import { useSelector, useDispatch } from 'react-redux'
 import { selectEmployees } from '../../store/selectors'
 import * as employeesActions from '../../features/employees'
 
-import MUIDataTable, {MUIDataTableOptions} from 'mui-datatables'
+import MUIDataTable, { MUIDataTableOptions } from 'mui-datatables'
 
 function Employees() {
   const dispatch = useDispatch()
@@ -28,36 +26,37 @@ function Employees() {
     'Street',
     'City',
     'State',
-    'Zip Code'
+    'Zip Code',
   ]
 
   const options: MUIDataTableOptions = {
+    textLabels: {
+      body: {
+        noMatch: 'No data available in table',
+      },
+    },
     filter: true,
     filterType: 'dropdown',
     responsive: 'standard',
-    rowsPerPageOptions: []
-  };
+    rowsPerPageOptions: [],
+  }
 
   return (
     <main className="main bg-dark">
-      {employees.length > 0 ? (
-        <>
-          <div className="header">
-            <h1>
-              Current Employees
-              <br />
-            </h1>         
-                <MUIDataTable
-                  title={''}
-                  data={employees.map((el) => Object.values(el))}
-                  columns={columns}
-                  options={options}
-                />        
-          </div>
-        </>
-      ) : (
-        <Navigate to="/" />
-      )}
+      <>
+        <div className="header">
+          <h1>
+            Current Employees
+            <br />
+          </h1>
+          <MUIDataTable
+            title={''}
+            data={employees.map((el) => Object.values(el))}
+            columns={columns}
+            options={options}
+          />
+        </div>
+      </>
     </main>
   )
 }

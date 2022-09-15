@@ -16,7 +16,7 @@ module.exports = ({ mode } = { mode: 'production' }) => {
       module: {
         rules: [
           {
-            test: /\.(jpe?g|png|gif|woff|woff2|eot|ttf|svg)(\?[a-z0-9=.]+)?$/,
+            test: /\.(jpe?g|png|gif|woff|woff2|eot|ttf|svg|ico)(\?[a-z0-9=.]+)?$/,
             exclude: /node_modules/,
             use: ['url-loader', 'file-loader'],
           },

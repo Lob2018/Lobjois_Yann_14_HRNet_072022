@@ -1,11 +1,8 @@
-import { useState } from 'react'
+import { useState, lazy } from 'react'
 
 import styled from 'styled-components'
 
 import { useForm } from 'react-hook-form'
-import joi from 'joi'
-
-import Modal from 'react-modal'
 
 import employeesService from '../../components/services/employees.service'
 
@@ -13,12 +10,18 @@ import { useDispatch } from 'react-redux'
 import * as loadingActions from '../../features/loading'
 import * as employeesActions from '../../features/employees'
 
-import DatePicker from 'react-datepicker'
-import 'react-datepicker/dist/react-datepicker.css'
 import Employee from '../../classes/employee.class'
 
+import joi from 'joi'
+
+import Modal from 'react-modal'
+
 import Dropdown from 'react-dropdown-component-library'
-import 'react-dropdown-component-library/dist/style.css'
+// import 'react-dropdown-component-library/dist/style.css'
+
+//import DatePicker from 'react-datepicker'
+// import 'react-datepicker/dist/react-datepicker.css'
+const DatePicker = lazy(() => import('react-datepicker'))
 
 const SectionContainer = styled.section`
   box-sizing: border-box;
@@ -138,7 +141,9 @@ function Home() {
   } = useForm()
 
   // regex for dates as MM/DD/YYYY
-  const regexUSDate = new RegExp(/^(0[1-9]|1[0-2])\/(0[1-9]|[12]\d|3[01])\/\d{4}$/)
+  const regexUSDate = new RegExp(
+    /^(0[1-9]|1[0-2])\/(0[1-9]|[12]\d|3[01])\/\d{4}$/
+  )
   // regex for whitespace and accented characters (a-z A-Z, spaces, hyphens, and ISO Latin1 decimal code 192 à 383)
   const regexText = new RegExp(/^[a-zA-Z\u00C0-\u017F\s\\-]+$/)
   // same with numbers
@@ -168,17 +173,8 @@ function Home() {
 
     // the joi schema
     const schema = joi.object({
-      city: joi
-        .string()
-        .pattern(regexText)
-        .optional()
-        .allow(null, '')
-        .max(255),
-      dateOfBirth: joi
-        .string()
-        .pattern(regexUSDate)
-        .optional()
-        .allow(null, ''),
+      city: joi.string().pattern(regexText).optional().allow(null, '').max(255),
+      dateOfBirth: joi.string().pattern(regexUSDate).optional().allow(null, ''),
       department: joi
         .string()
         .pattern(regexTextAndNumbers)
@@ -197,11 +193,7 @@ function Home() {
         .optional()
         .allow(null, '')
         .max(255),
-      startDate: joi
-        .string()
-        .pattern(regexUSDate)
-        .optional()
-        .allow(null, ''),
+      startDate: joi.string().pattern(regexUSDate).optional().allow(null, ''),
       state: joi
         .string()
         .pattern(regexTextAndNumbers)
@@ -325,13 +317,13 @@ function Home() {
                 {...register('street', {
                   required: false,
                   maxLength: 255,
-                  pattern:regexTextAndNumbers,
+                  pattern: regexTextAndNumbers,
                 })}
               />
               {errors.street && (
                 <StyledErrors>
-                  The street's maximum length is 255, and must only contain
-                  text and numbers.
+                  The street's maximum length is 255, and must only contain text
+                  and numbers.
                 </StyledErrors>
               )}
             </InputWrapper>
@@ -347,8 +339,9 @@ function Home() {
                 })}
               />
               {errors.city && (
-                <StyledErrors>The city's maximum length is 255, and must only contain
-                text.</StyledErrors>
+                <StyledErrors>
+                  The city's maximum length is 255, and must only contain text.
+                </StyledErrors>
               )}
             </InputWrapper>
             <InputWrapper>
@@ -610,15 +603,16 @@ function Home() {
               <input
                 type="text"
                 id="zipCode"
-                {...register('zipCode', { 
+                {...register('zipCode', {
                   required: false,
-                   maxLength: 32,
-                   pattern: regexUSZipCodes,
-                  })}
+                  maxLength: 32,
+                  pattern: regexUSZipCodes,
+                })}
               />
               {errors.zipCode && (
                 <StyledErrors>
-                  The zip code's maximum length is 32, with the US format (ex. : 12345 or 12345-6789)
+                  The zip code's maximum length is 32, with the US format (ex. :
+                  12345 or 12345-6789)
                 </StyledErrors>
               )}
             </InputWrapper>{' '}

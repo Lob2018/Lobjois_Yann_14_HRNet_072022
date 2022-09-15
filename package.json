@@ -1,6 +1,6 @@
 {
   "name": "hrnet",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.9.3",
@@ -42,8 +42,9 @@
     "doc": "jsdoc -c jsdoc.conf.json",
     "webpack": "webpack",
     "webpack-dev-server": "webpack-dev-server",
-    "dev": "yarn run webpack-dev-server -- --env mode=development",
-    "prod": "yarn run webpack -- --env mode=production"
+    "dev": "rm -rf dist && rm -rf build && yarn run webpack-dev-server -- --env mode=development",
+    "prod": "rm -rf dist && rm -rf build && yarn run webpack -- --env mode=production",
+    "prod-local": "serve build/"
   },
   "eslintConfig": {
     "extends": [
