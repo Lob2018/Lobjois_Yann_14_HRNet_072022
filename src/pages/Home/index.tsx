@@ -16,11 +16,14 @@ import joi from 'joi'
 
 import Modal from 'react-modal'
 
-import Dropdown from 'react-dropdown-component-library'
+// import Dropdown from 'react-dropdown-component-library'
 // import 'react-dropdown-component-library/dist/style.css'
 
-//import DatePicker from 'react-datepicker'
+const Dropdown = lazy(() => import('react-dropdown-component-library'))
+
+// import DatePicker from 'react-datepicker'
 // import 'react-datepicker/dist/react-datepicker.css'
+
 const DatePicker = lazy(() => import('react-datepicker'))
 
 const SectionContainer = styled.section`
@@ -152,8 +155,6 @@ function Home() {
   const regexUSZipCodes = new RegExp(/^\d{5}(?:-\d{4})?$/)
 
   const onSubmit = async (data: Record<string, string>) => {
-    console.log(errors)
-
     const dateOptions: Intl.DateTimeFormatOptions = {
       month: '2-digit',
       day: '2-digit',
@@ -237,14 +238,10 @@ function Home() {
         dispatch(loadingActions.set(false))
         openModal()
       } catch (e) {
-        console.log('2 : ' + e)
-
         checkAccountValidity(false)
         dispatch(loadingActions.set(false))
       }
     } catch (e) {
-      console.log('1 : ' + e)
-
       checkAccountValidity(false)
     }
   }

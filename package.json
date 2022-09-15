@@ -42,8 +42,8 @@
     "doc": "jsdoc -c jsdoc.conf.json",
     "webpack": "webpack",
     "webpack-dev-server": "webpack-dev-server",
-    "dev": "rm -rf dist && rm -rf build && yarn run webpack-dev-server -- --env mode=development",
-    "prod": "rm -rf dist && rm -rf build && yarn run webpack -- --env mode=production",
+    "dev": "rm -rf dist && rm -rf build && yarn run webpack-dev-server --env mode=development",
+    "prod": "rm -rf dist && rm -rf build && yarn run webpack --env mode=production",
     "prod-local": "serve build/"
   },
   "eslintConfig": {
