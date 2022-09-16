@@ -950,8 +950,8 @@ const StyledGlobalStyle = createGlobalStyle`
       border-color: #12002b transparent #12002b transparent;
       animation: yl-loader 1.2s linear infinite;
       position: absolute;
-      top: calc(50% - 32px);
-      left: calc(50% - 32px);
+      top: calc(50% - 40px);
+      left: calc(50% - 40px);
       transform: translate(-50%, -50%);
     }
     @keyframes yl-loader {

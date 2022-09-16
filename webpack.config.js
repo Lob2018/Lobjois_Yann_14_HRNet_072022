@@ -8,6 +8,8 @@ const options = {}
 
 const LodashModuleReplacementPlugin = require('lodash-webpack-plugin')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+const CopyPlugin = require("copy-webpack-plugin");
+
 
 module.exports = ({ mode } = { mode: 'production' }) => {
   console.log(`mode is: ${mode}`)
@@ -61,6 +63,11 @@ module.exports = ({ mode } = { mode: 'production' }) => {
         new WebpackManifestPlugin(options),
         new LodashModuleReplacementPlugin(),
         new UglifyJsPlugin(),
+        new CopyPlugin({
+          patterns: [
+            { from: "./public/_redirects", to: "" },
+          ],
+        }),
       ],
       resolve: {
         extensions: ['.tsx', '.ts', '.js'],
