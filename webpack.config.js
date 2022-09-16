@@ -6,6 +6,9 @@ const modeConfiguration = (env) => require(`./build-utils/webpack.${env}`)(env)
 const { WebpackManifestPlugin } = require('webpack-manifest-plugin')
 const options = {}
 
+const LodashModuleReplacementPlugin = require('lodash-webpack-plugin')
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+
 module.exports = ({ mode } = { mode: 'production' }) => {
   console.log(`mode is: ${mode}`)
 
@@ -15,6 +18,12 @@ module.exports = ({ mode } = { mode: 'production' }) => {
       entry: './src/index.tsx',
       devServer: {
         open: true,
+      },
+      optimization: {
+        splitChunks: {
+          chunks: 'async',
+          minChunks: 2,
+        },
       },
       module: {
         rules: [
@@ -27,6 +36,10 @@ module.exports = ({ mode } = { mode: 'production' }) => {
             test: /\.(js|jsx)$/,
             exclude: /node_modules/,
             loader: 'babel-loader',
+            options: {
+              plugins: ['lodash'],
+              presets: ['env', { modules: false, targets: { node: 4 } }],
+            },
           },
           {
             test: /\.tsx?$/,
@@ -46,6 +59,8 @@ module.exports = ({ mode } = { mode: 'production' }) => {
           favicon: './public/favicon.ico',
         }),
         new WebpackManifestPlugin(options),
+        new LodashModuleReplacementPlugin(),
+        new UglifyJsPlugin(),
       ],
       resolve: {
         extensions: ['.tsx', '.ts', '.js'],
