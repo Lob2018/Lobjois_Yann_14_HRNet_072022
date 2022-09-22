@@ -1,4 +1,4 @@
-import { useState, lazy } from 'react'
+import { useState } from 'react'
 
 import styled from 'styled-components'
 
@@ -16,15 +16,15 @@ import joi from 'joi'
 
 import Modal from 'react-modal'
 
-// import Dropdown from 'react-dropdown-component-library'
+import Dropdown from 'react-dropdown-component-library'
 // import 'react-dropdown-component-library/dist/style.css'
 
-const Dropdown = lazy(() => import('react-dropdown-component-library'))
+// const Dropdown = lazy(() => import('react-dropdown-component-library'))
 
-// import DatePicker from 'react-datepicker'
+ import DatePicker from 'react-datepicker'
 // import 'react-datepicker/dist/react-datepicker.css'
 
-const DatePicker = lazy(() => import('react-datepicker'))
+// const DatePicker = lazy(() => import('react-datepicker'))
 
 const SectionContainer = styled.section`
   box-sizing: border-box;
