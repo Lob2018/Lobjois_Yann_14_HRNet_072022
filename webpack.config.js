@@ -36,15 +36,11 @@ module.exports = ({ mode } = { mode: 'production' }) => {
         rules: [
           {
             // file-loader and url-loader emits the files into the output directory
-            // url-loader can return as a DataURL if it is smaller than 8192 byte
             test: /\.(jpe?g|png|gif|woff|woff2|eot|ttf|svg|ico)(\?[a-z0-9=.]+)?$/,
             exclude: /node_modules/,
             use: [
               {
                 loader: 'url-loader',
-                options: {
-                  limit: 8192,
-                },
               },
               'file-loader?name=[name].[ext]',
             ],
@@ -89,7 +85,10 @@ module.exports = ({ mode } = { mode: 'production' }) => {
         new UglifyJsPlugin(),
         // copies the _redirects file for Netlify to the build directory
         new CopyPlugin({
-          patterns: [{ from: './public/_redirects', to: '' }],
+          patterns: [
+            { from: './public/_redirects', to: '' },
+            { from: './public/robots.txt', to: '' },
+          ],
         }),
       ],
       resolve: {
