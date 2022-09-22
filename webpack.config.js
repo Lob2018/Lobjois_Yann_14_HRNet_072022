@@ -11,8 +11,9 @@ const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const CopyPlugin = require('copy-webpack-plugin')
 
 module.exports = ({ mode } = { mode: 'production' }) => {
-  console.log(`mode is: ${mode}`)
+  // console.log(`mode is: ${mode}`)
 
+  // concatenante the generic configurations (1st arg) and the prod or dev configuration (2nd arg)
   return merge(
     {
       // current mode
@@ -50,6 +51,7 @@ module.exports = ({ mode } = { mode: 'production' }) => {
           },
           {
             // tells webpack to load the .bavelrc file
+            // use lodash to import only things that needed to be imported from lodash
             test: /\.(js|jsx)$/,
             exclude: /node_modules/,
             loader: 'babel-loader',
@@ -73,27 +75,35 @@ module.exports = ({ mode } = { mode: 'production' }) => {
         ],
       },
       plugins: [
+        // used to achieve what loaders cannot
         new HtmlWebpackPlugin({
           template: './public/index.html',
           filename: './index.html',
           favicon: './public/favicon.ico',
         }),
+        // generate an asset manifest
         new WebpackManifestPlugin(options),
+        // create smaller lodash builds
         new LodashModuleReplacementPlugin(),
+        // minify JS
         new UglifyJsPlugin(),
+        // copies the _redirects file for Netlify to the build directory
         new CopyPlugin({
           patterns: [{ from: './public/_redirects', to: '' }],
         }),
       ],
       resolve: {
+        // resolve this extensions first (even with the same name)
         extensions: ['.tsx', '.ts', '.js'],
       },
+      // tells webpack to call, the folder and the bundled JS
       output: {
         publicPath: '/',
         path: path.resolve(__dirname, 'build'),
         filename: 'bundle.js',
       },
     },
+    // function that loads the mode we're in (dev or prod)
     modeConfiguration(mode)
   )
 }

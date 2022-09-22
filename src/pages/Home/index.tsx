@@ -11,20 +11,10 @@ import * as loadingActions from '../../features/loading'
 import * as employeesActions from '../../features/employees'
 
 import Employee from '../../classes/employee.class'
-
 import joi from 'joi'
-
 import Modal from 'react-modal'
-
 import Dropdown from 'react-dropdown-component-library'
-// import 'react-dropdown-component-library/dist/style.css'
-
-// const Dropdown = lazy(() => import('react-dropdown-component-library'))
-
- import DatePicker from 'react-datepicker'
-// import 'react-datepicker/dist/react-datepicker.css'
-
-// const DatePicker = lazy(() => import('react-datepicker'))
+import DatePicker from 'react-datepicker'
 
 const SectionContainer = styled.section`
   box-sizing: border-box;
