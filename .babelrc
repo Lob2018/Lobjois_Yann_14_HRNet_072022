@@ -4,6 +4,7 @@
     [
       "@babel/env",
       { "targets": { "node": 6 } },
+      // tells webpack to compile to ES5
       "@babel/preset-env",
       {
         "targets": {
@@ -14,8 +15,10 @@
       }
     ]
   ],
+  // transform-class-properties for backward compatibility
   "plugins": ["lodash", "transform-class-properties"],
   "env": {
+    // transform-es2015-modules-commonjs for backward compatibility
     "test": {
       "plugins": ["transform-es2015-modules-commonjs"]
     }

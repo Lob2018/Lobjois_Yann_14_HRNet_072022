@@ -15,39 +15,58 @@ module.exports = ({ mode } = { mode: 'production' }) => {
 
   return merge(
     {
+      // current mode
       mode,
+      // the top file of the app
       entry: './src/index.tsx',
+      // in the dev mode it opens the app in the server
       devServer: {
         open: true,
       },
       optimization: {
+        // chunks strategies
         splitChunks: {
           chunks: 'async',
-          minChunks: 2,
+          // the minimum times must a module be shared among chunks before splitting (here we've one file sharing common dependencies)
+          minChunks: 1,
         },
       },
       module: {
         rules: [
           {
+            // file-loader and url-loader emits the files into the output directory
+            // url-loader can return as a DataURL if it is smaller than 8192 byte
             test: /\.(jpe?g|png|gif|woff|woff2|eot|ttf|svg|ico)(\?[a-z0-9=.]+)?$/,
             exclude: /node_modules/,
-            use: ['url-loader', 'file-loader?name=[name].[ext]'],
+            use: [
+              {
+                loader: 'url-loader',
+                options: {
+                  limit: 8192,
+                },
+              },
+              'file-loader?name=[name].[ext]',
+            ],
           },
           {
+            // tells webpack to load the .bavelrc file
             test: /\.(js|jsx)$/,
             exclude: /node_modules/,
             loader: 'babel-loader',
             options: {
               plugins: ['lodash'],
-              presets: ['env', { modules: false, targets: { node: 4 } }],
+              presets: ['env', { modules: false, targets: { node: 6 } }],
             },
           },
           {
+            // Typescript loader for webpack
             test: /\.tsx?$/,
             use: 'ts-loader',
             exclude: /node_modules/,
           },
           {
+            // style-loader : Inject CSS into the DOM
+            // css-loader : interpret and resolve @import and import/require()
             test: /\.css$/i,
             use: ['style-loader', 'css-loader'],
           },
