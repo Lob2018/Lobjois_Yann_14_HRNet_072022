@@ -25,7 +25,7 @@ root.render(
       <Provider store={store}>
         <GlobalStyle />
         <Header />
-        <Suspense fallback={<div className='yl-loader'></div>}>
+        <Suspense fallback={<div className="yl-loader"></div>}>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/employees" element={<Employees />} />

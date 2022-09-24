@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { lazy, Suspense, useState } from 'react'
 
 import styled from 'styled-components'
 
@@ -15,7 +15,7 @@ import joi from 'joi'
 import Modal from 'react-modal'
 import Dropdown from 'react-dropdown-component-library'
 
-import MyDatePicker from '../../components/MyDatePicker'
+const MyDatePicker = lazy(() => import('../../components/MyDatePicker'))
 
 const SectionContainer = styled.section`
   box-sizing: border-box;
@@ -152,7 +152,6 @@ function Home() {
   const regexUSZipCodes = new RegExp(/^\d{5}(?:-\d{4})?$/)
 
   const onSubmit = async (data: Record<string, string>) => {
-
     const city = data.city || ''
     const dateOfBirth =
       dateOfBirthPicker.toLocaleDateString('en-US', dateOptions) || ''
@@ -283,21 +282,25 @@ function Home() {
           </InputWrapper>
           <InputWrapper>
             <label htmlFor="dateOfBirth">Date of Birth</label>
-            <MyDatePicker
-              liftingDatePickerValueUp={(value: Date) => {
-                setDateOfBirthPicker(value)
-              }}
-              id="dateOfBirth"
-            />
+            <Suspense fallback={<div>loading...</div>}>
+              <MyDatePicker
+                liftingDatePickerValueUp={(value: Date) => {
+                  setDateOfBirthPicker(value)
+                }}
+                id="dateOfBirth"
+              />
+            </Suspense>
           </InputWrapper>
           <InputWrapper>
             <label htmlFor="startDate">Start Date</label>
-            <MyDatePicker
-              liftingDatePickerValueUp={(value: Date) => {
-                setStartDatePicker(value)
-              }}
-              id="startDate"
-            />
+            <Suspense fallback={<div>loading...</div>}>
+              <MyDatePicker
+                liftingDatePickerValueUp={(value: Date) => {
+                  setStartDatePicker(value)
+                }}
+                id="startDate"
+              />{' '}
+            </Suspense>
           </InputWrapper>
           <fieldset className="fieldset-employee">
             <legend>Address</legend>
