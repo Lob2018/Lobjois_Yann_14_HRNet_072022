@@ -46,7 +46,7 @@
     "dev": "rm -rf dist && rm -rf build && yarn run webpack-dev-server --env mode=development",
     "prod": "rm -rf dist && rm -rf build && yarn run webpack --env mode=production",
     "prod-local": "serve build/",
-    "analyze" : "yarn run webpack --env mode=production --profile --json > stats.json"
+    "analyze": "yarn run webpack --env mode=production --profile --json > stats.json"
   },
   "eslintConfig": {
     "extends": [
@@ -89,6 +89,7 @@
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
     "babel-preset-env": "^1.7.0",
+    "compression-webpack-plugin": "^10.0.0",
     "copy-webpack-plugin": "^11.0.0",
     "css-loader": "^6.7.1",
     "eslint": "^8.20.0",

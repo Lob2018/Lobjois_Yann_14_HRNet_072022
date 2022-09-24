@@ -1,6 +1,7 @@
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
+const CompressionPlugin = require("compression-webpack-plugin");
 // ANALYZE
 //const WebpackBundleAnalyzer = require('webpack-bundle-analyzer')
 
@@ -36,8 +37,10 @@ module.exports = () => ({
       },
     ],
   },
-  plugins: [    
+  plugins: [      
     new MiniCssExtractPlugin(),
+    // Compress files with Gzip
+    new CompressionPlugin(),  
     // ANALYZE
     //new WebpackBundleAnalyzer.BundleAnalyzerPlugin(),
   ],
