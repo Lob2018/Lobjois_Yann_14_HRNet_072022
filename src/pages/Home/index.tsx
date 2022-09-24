@@ -14,7 +14,8 @@ import Employee from '../../classes/employee.class'
 import joi from 'joi'
 import Modal from 'react-modal'
 import Dropdown from 'react-dropdown-component-library'
-import DatePicker from 'react-datepicker'
+
+import MyDatePicker from '../../components/MyDatePicker'
 
 const SectionContainer = styled.section`
   box-sizing: border-box;
@@ -105,8 +106,9 @@ function Home() {
     setIsOpen(false)
   }
 
-  // datepickers
+  // dateOfBirthPicker
   const [dateOfBirthPicker, setDateOfBirthPicker] = useState(new Date())
+  // startDatePicker
   const [startDatePicker, setStartDatePicker] = useState(new Date())
 
   // state dropdown
@@ -137,6 +139,11 @@ function Home() {
   const regexUSDate = new RegExp(
     /^(0[1-9]|1[0-2])\/(0[1-9]|[12]\d|3[01])\/\d{4}$/
   )
+  const dateOptions: Intl.DateTimeFormatOptions = {
+    month: '2-digit',
+    day: '2-digit',
+    year: 'numeric',
+  }
   // regex for whitespace and accented characters (a-z A-Z, spaces, hyphens, and ISO Latin1 decimal code 192 à 383)
   const regexText = new RegExp(/^[a-zA-Z\u00C0-\u017F\s\\-]+$/)
   // same with numbers
@@ -145,11 +152,7 @@ function Home() {
   const regexUSZipCodes = new RegExp(/^\d{5}(?:-\d{4})?$/)
 
   const onSubmit = async (data: Record<string, string>) => {
-    const dateOptions: Intl.DateTimeFormatOptions = {
-      month: '2-digit',
-      day: '2-digit',
-      year: 'numeric',
-    }
+
     const city = data.city || ''
     const dateOfBirth =
       dateOfBirthPicker.toLocaleDateString('en-US', dateOptions) || ''
@@ -280,17 +283,19 @@ function Home() {
           </InputWrapper>
           <InputWrapper>
             <label htmlFor="dateOfBirth">Date of Birth</label>
-            <DatePicker
-              selected={dateOfBirthPicker}
-              onChange={(date: Date) => setDateOfBirthPicker(date)}
+            <MyDatePicker
+              liftingDatePickerValueUp={(value: Date) => {
+                setDateOfBirthPicker(value)
+              }}
               id="dateOfBirth"
             />
           </InputWrapper>
           <InputWrapper>
             <label htmlFor="startDate">Start Date</label>
-            <DatePicker
-              selected={startDatePicker}
-              onChange={(date: Date) => setStartDatePicker(date)}
+            <MyDatePicker
+              liftingDatePickerValueUp={(value: Date) => {
+                setStartDatePicker(value)
+              }}
               id="startDate"
             />
           </InputWrapper>
