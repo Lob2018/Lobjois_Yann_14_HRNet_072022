@@ -73,6 +73,11 @@ const StyledModalText = styled.div`
   text-align: left;
 `
 
+const StyledLoading = styled.div`
+  font-size: 1.2rem;
+  padding: 7px;
+`
+
 const customStyles = {
   overlay: {
     backgroundColor: 'rgba(0,0,0,0.75)',
@@ -282,7 +287,7 @@ function Home() {
           </InputWrapper>
           <InputWrapper>
             <label htmlFor="dateOfBirth">Date of Birth</label>
-            <Suspense fallback={<div>loading...</div>}>
+            <Suspense fallback={<StyledLoading>loading...</StyledLoading>}>
               <MyDatePicker
                 liftingDatePickerValueUp={(value: Date) => {
                   setDateOfBirthPicker(value)
@@ -293,7 +298,7 @@ function Home() {
           </InputWrapper>
           <InputWrapper>
             <label htmlFor="startDate">Start Date</label>
-            <Suspense fallback={<div>loading...</div>}>
+            <Suspense fallback={<StyledLoading>loading...</StyledLoading>}>
               <MyDatePicker
                 liftingDatePickerValueUp={(value: Date) => {
                   setStartDatePicker(value)
