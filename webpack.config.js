@@ -6,7 +6,6 @@ const modeConfiguration = (env) => require(`./build-utils/webpack.${env}`)(env)
 const { WebpackManifestPlugin } = require('webpack-manifest-plugin')
 const options = {}
 
-const LodashModuleReplacementPlugin = require('lodash-webpack-plugin')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const CopyPlugin = require('copy-webpack-plugin')
 
@@ -46,15 +45,10 @@ module.exports = ({ mode } = { mode: 'production' }) => {
             ],
           },
           {
-            // tells webpack to load the .bavelrc file
-            // use lodash to import only things that needed to be imported from lodash
+            // tells webpack to load the .babelrc file
             test: /\.(js|jsx)$/,
             exclude: /node_modules/,
             loader: 'babel-loader',
-            options: {
-              plugins: ['lodash'],
-              presets: ['env', { modules: false, targets: { node: 6 } }],
-            },
           },
           {
             // Typescript loader for webpack
@@ -79,8 +73,6 @@ module.exports = ({ mode } = { mode: 'production' }) => {
         }),
         // generate an asset manifest
         new WebpackManifestPlugin(options),
-        // create smaller lodash builds
-        new LodashModuleReplacementPlugin(),
         // minify JS
         new UglifyJsPlugin(),
         // copies the _redirects file for Netlify to the build directory

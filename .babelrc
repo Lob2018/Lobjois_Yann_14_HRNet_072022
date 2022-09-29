@@ -1,29 +1,39 @@
 {
   "presets": [
-    // adds support for jsx syntax
-    "@babel/preset-react",
     [
-      // lodash transform to cherry-pick Lodash modules (smaller cherry-picked builds)
-      "@babel/env",
-      { "targets": { "node": 6 } },
       // tells webpack to compile to ES5
       "@babel/preset-env",
       {
         "targets": {
-          "browsers": "last 2 versions"
+          "browsers": ["last 2 versions", "not ie <=11", "not op_mini all"]
         },
         "modules": false,
         "loose": false
       }
-    ]
+    ],
+    // adds support for jsx syntax
+    "@babel/preset-react",
+    // adds support for typescript
+    "@babel/preset-typescrit"
   ],
   // transform-class-properties for backward compatibility
-  // lodash transform to cherry-pick Lodash modules (smaller cherry-picked builds)
-  "plugins": ["lodash", "transform-class-properties"],
+  // @babel/plugin-transform-runtime enable the reuse of Babel's injected helper code to save on codesize
+  "plugins": ["@babel/plugin-transform-runtime", "transform-class-properties"],
   "env": {
     // transform-es2015-modules-commonjs for backward compatibility
+    // import, allows Webpack to only pick necessary @material-ui/core code lines when traversing through the dependency graph
     "test": {
-      "plugins": ["transform-es2015-modules-commonjs"]
+      "plugins": [
+        "transform-es2015-modules-commonjs",
+        [
+          "import",
+          {
+            "libraryName": "@material-ui/core",
+            "libraryDirectory": "components", // default: lib
+            "camel2DashComponentName": false // default: true
+          }
+        ]
+      ]
     }
   }
 }
