@@ -43,7 +43,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "local": "serve build/"
+    "static": "serve -s build"
   },
   "eslintConfig": {
     "extends": [

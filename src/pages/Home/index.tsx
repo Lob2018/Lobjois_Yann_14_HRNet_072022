@@ -1,4 +1,4 @@
-import { lazy, Suspense, useState } from 'react'
+import { Suspense, useState } from 'react'
 
 import styled from 'styled-components'
 
@@ -14,8 +14,11 @@ import Employee from '../../classes/employee.class'
 import joi from 'joi'
 import Modal from 'react-modal'
 
-const MyDatePicker = lazy(() => import('../../components/MyDatePicker'))
-const Dropdown = lazy(() => import('react-dropdown-component-library'))
+// const MyDatePicker = lazy(() => import('../../components/MyDatePicker'))
+// const Dropdown = lazy(() => import('react-dropdown-component-library'))
+
+import MyDatePicker from '../../components/MyDatePicker'
+import Dropdown from 'react-dropdown-component-library'
 
 const SectionContainer = styled.section`
   box-sizing: border-box;
