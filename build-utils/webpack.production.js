@@ -43,7 +43,7 @@ module.exports = () => ({
     // Compress files with Brotli
     new BrotliPlugin({
       asset: '[path].br[query]',
-      test: /\.(js|css|html|svg)$/,
+      test: /\.(js|css|html)$/,
       threshold: 10240,
       minRatio: 0.8,
     }),
