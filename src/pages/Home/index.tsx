@@ -11,14 +11,10 @@ import * as loadingActions from '../../features/loading'
 import * as employeesActions from '../../features/employees'
 
 import Employee from '../../classes/employee.class'
-import joi from 'joi'
-import Modal from 'react-modal'
 
-// const MyDatePicker = lazy(() => import('../../components/MyDatePicker'))
-// const Dropdown = lazy(() => import('react-dropdown-component-library'))
-
-import MyDatePicker from '../../components/MyDatePicker'
 import Dropdown from 'react-dropdown-component-library'
+import MyDatePicker from '../../components/MyDatePicker'
+import Modal from 'react-modal'
 
 const SectionContainer = styled.section`
   box-sizing: border-box;
@@ -176,78 +172,90 @@ function Home() {
     const street = data.street || ''
     const zipCode = data.zipCode || ''
 
-    // the joi schema
-    const schema = joi.object({
-      city: joi.string().pattern(regexText).optional().allow(null, '').max(255),
-      dateOfBirth: joi.string().pattern(regexUSDate).optional().allow(null, ''),
-      department: joi
-        .string()
-        .pattern(regexTextAndNumbers)
-        .optional()
-        .allow(null, '')
-        .max(255),
-      firstName: joi
-        .string()
-        .pattern(regexText)
-        .optional()
-        .allow(null, '')
-        .max(255),
-      lastName: joi
-        .string()
-        .pattern(regexText)
-        .optional()
-        .allow(null, '')
-        .max(255),
-      startDate: joi.string().pattern(regexUSDate).optional().allow(null, ''),
-      state: joi
-        .string()
-        .pattern(regexTextAndNumbers)
-        .optional()
-        .allow(null, '')
-        .max(255),
-      street: joi
-        .string()
-        .pattern(regexTextAndNumbers)
-        .optional()
-        .allow(null, '')
-        .max(255),
-      zipCode: joi
-        .string()
-        .pattern(regexUSZipCodes)
-        .optional()
-        .allow(null, '')
-        .max(32),
-    })
+    // the joi code splitting loading on submit
+    import('../../components/MySchemaValidator')
+      .then(async ({ MySchemaValidator }) => {
+        const schema = MySchemaValidator.object({
+          city: MySchemaValidator.string()
+            .pattern(regexText)
+            .optional()
+            .allow(null, '')
+            .max(255),
+          dateOfBirth: MySchemaValidator.string()
+            .pattern(regexUSDate)
+            .optional()
+            .allow(null, ''),
+          department: MySchemaValidator.string()
+            .pattern(regexTextAndNumbers)
+            .optional()
+            .allow(null, '')
+            .max(255),
+          firstName: MySchemaValidator.string()
+            .pattern(regexText)
+            .optional()
+            .allow(null, '')
+            .max(255),
+          lastName: MySchemaValidator.string()
+            .pattern(regexText)
+            .optional()
+            .allow(null, '')
+            .max(255),
+          startDate: MySchemaValidator.string()
+            .pattern(regexUSDate)
+            .optional()
+            .allow(null, ''),
+          state: MySchemaValidator.string()
+            .pattern(regexTextAndNumbers)
+            .optional()
+            .allow(null, '')
+            .max(255),
+          street: MySchemaValidator.string()
+            .pattern(regexTextAndNumbers)
+            .optional()
+            .allow(null, '')
+            .max(255),
+          zipCode: MySchemaValidator.string()
+            .pattern(regexUSZipCodes)
+            .optional()
+            .allow(null, '')
+            .max(32),
+        })
 
-    // joi validation
-    try {
-      const employee = new Employee(
-        firstName,
-        lastName,
-        startDate,
-        department,
-        dateOfBirth,
-        street,
-        city,
-        state,
-        zipCode
-      )
+        // joi validation
+        try {
+          const employee = new Employee(
+            firstName,
+            lastName,
+            startDate,
+            department,
+            dateOfBirth,
+            street,
+            city,
+            state,
+            zipCode
+          )
 
-      await schema.validateAsync(employee)
-      dispatch(loadingActions.set(true))
-      // Add the employee
-      employeesService.addEmployee(employee)
-      try {
-        dispatch(employeesActions.saveEmployee(employeesService.allEmployees()))
-        dispatch(loadingActions.set(false))
-        openModal()
-      } catch (e) {
+          await schema.validateAsync(employee)
+          dispatch(loadingActions.set(true))
+          // Add the employee
+          employeesService.addEmployee(employee)
+          try {
+            dispatch(
+              employeesActions.saveEmployee(employeesService.allEmployees())
+            )
+            dispatch(loadingActions.set(false))
+            openModal()
+          } catch (e) {
+            checkAccountValidity(false)
+            dispatch(loadingActions.set(false))
+          }
+        } catch (e) {
+          checkAccountValidity(false)
+        }
+      })
+      .catch((err) => {
         checkAccountValidity(false)
-        dispatch(loadingActions.set(false))
-      }
-    } catch (e) {
-      checkAccountValidity(false)
-    }
+      })
   }
 
   return (
