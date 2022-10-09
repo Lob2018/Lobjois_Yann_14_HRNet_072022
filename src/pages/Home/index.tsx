@@ -1,4 +1,4 @@
-import { Suspense, useState } from 'react'
+import { useState } from 'react'
 
 import styled from 'styled-components'
 
@@ -72,14 +72,14 @@ const StyledModalText = styled.div`
   text-align: left;
 `
 
-const StyledDateLoading = styled.div`
-  font-size: 1.2rem;
-  padding: 7px;
-`
-const StyledDropdownLoading = styled.div`
-  font-size: 1em;
-  padding: 15px;
-`
+// const StyledDateLoading = styled.div`
+//   font-size: 1.2rem;
+//   padding: 7px;
+// `
+// const StyledDropdownLoading = styled.div`
+//   font-size: 1em;
+//   padding: 15px;
+// `
 
 const customStyles = {
   overlay: {
@@ -116,18 +116,37 @@ function Home() {
 
   // dateOfBirthPicker
   const [dateOfBirthPicker, setDateOfBirthPicker] = useState(new Date())
+  const handleDateOfBirthSelected = (value: Date) => {
+    if (value.toLocaleDateString('en-US', dateOptions).match(regexUSDate)) {
+      clearErrors('dateOfBirth')
+    } else setError('dateOfBirth', {})
+    setDateOfBirthPicker(value ? value : new Date())
+  }
+
   // startDatePicker
   const [startDatePicker, setStartDatePicker] = useState(new Date())
+  const handleStartDateSelected = (value: Date) => {
+    if (value.toLocaleDateString('en-US', dateOptions).match(regexUSDate)) {
+      clearErrors('startDate')
+    } else setError('startDate', {})
+    setStartDatePicker(value ? value : new Date())
+  }
 
-  // state dropdown
+  // state dropdown with controls
   const [stateValue, setStateValue] = useState('')
   const handleStateDropdown = (value: string) => {
+    if (value.length >= 255) {
+      setError('state', {})
+    } else clearErrors('state')
     setStateValue(value ? value : '')
   }
 
-  // department dropdown
+  // department dropdown with controls
   const [departmentValue, setDepartmentValue] = useState('')
   const handleDepartmentDropdown = (value: string) => {
+    if (value.length >= 255) {
+      setError('department', {})
+    } else clearErrors('department')
     setDepartmentValue(value ? value : '')
   }
 
@@ -140,6 +159,8 @@ function Home() {
   const {
     register,
     handleSubmit,
+    setError,
+    clearErrors,
     formState: { errors },
   } = useForm()
 
@@ -222,6 +243,7 @@ function Home() {
         })
 
         // joi validation
+        checkAccountValidity(true)
         try {
           const employee = new Employee(
             firstName,
@@ -302,29 +324,31 @@ function Home() {
           </InputWrapper>
           <InputWrapper>
             <label htmlFor="dateOfBirth">Date of Birth</label>
-            <Suspense
-              fallback={<StyledDateLoading>loading...</StyledDateLoading>}
-            >
-              <MyDatePicker
-                liftingDatePickerValueUp={(value: Date) => {
-                  setDateOfBirthPicker(value)
-                }}
-                id="dateOfBirth"
-              />
-            </Suspense>
+            <MyDatePicker
+              liftingDatePickerValueUp={(value: Date) => {
+                handleDateOfBirthSelected(value)
+              }}
+              id="dateOfBirth"
+            />
+            {errors.dateOfBirth && (
+              <StyledErrors>
+                The date of birth format is MM/DD/YYYY.
+              </StyledErrors>
+            )}
           </InputWrapper>
           <InputWrapper>
             <label htmlFor="startDate">Start Date</label>
-            <Suspense
-              fallback={<StyledDateLoading>loading...</StyledDateLoading>}
-            >
-              <MyDatePicker
-                liftingDatePickerValueUp={(value: Date) => {
-                  setStartDatePicker(value)
-                }}
-                id="startDate"
-              />
-            </Suspense>
+            <MyDatePicker
+              liftingDatePickerValueUp={(value: Date) => {
+                handleStartDateSelected(value)
+              }}
+              id="startDate"
+            />
+            {errors.startDate && (
+              <StyledErrors>
+                The start date format is MM/DD/YYYY.
+              </StyledErrors>
+            )}
           </InputWrapper>
           <fieldset className="fieldset-employee">
             <legend>Address</legend>
@@ -365,260 +389,253 @@ function Home() {
             </InputWrapper>
             <InputWrapper>
               <label id="state">State</label>
-              <Suspense
-                fallback={
-                  <StyledDropdownLoading>loading...</StyledDropdownLoading>
-                }
-              >
-                <Dropdown
-                  labelId="state"
-                  defaultValue={{
+              <Dropdown
+                labelId="state"
+                defaultValue={{
+                  value: 'Alabama',
+                  overrideValue: 'AL',
+                }}
+                data={[
+                  {
                     value: 'Alabama',
                     overrideValue: 'AL',
-                  }}
-                  data={[
-                    {
-                      value: 'Alabama',
-                      overrideValue: 'AL',
-                    },
-                    {
-                      value: 'Alaska',
-                      overrideValue: 'AK',
-                    },
-                    {
-                      value: 'American Samoa',
-                      overrideValue: 'AS',
-                    },
-                    {
-                      value: 'Arizona',
-                      overrideValue: 'AZ',
-                    },
-                    {
-                      value: 'Arkansas',
-                      overrideValue: 'AR',
-                    },
-                    {
-                      value: 'California',
-                      overrideValue: 'CA',
-                    },
-                    {
-                      value: 'Colorado',
-                      overrideValue: 'CO',
-                    },
-                    {
-                      value: 'Connecticut',
-                      overrideValue: 'CT',
-                    },
-                    {
-                      value: 'Delaware',
-                      overrideValue: 'DE',
-                    },
-                    {
-                      value: 'District Of Columbia',
-                      overrideValue: 'DC',
-                    },
-                    {
-                      value: 'Federated States Of Micronesia',
-                      overrideValue: 'FM',
-                    },
-                    {
-                      value: 'Florida',
-                      overrideValue: 'FL',
-                    },
-                    {
-                      value: 'Georgia',
-                      overrideValue: 'GA',
-                    },
-                    {
-                      value: 'Guam',
-                      overrideValue: 'GU',
-                    },
-                    {
-                      value: 'Hawaii',
-                      overrideValue: 'HI',
-                    },
-                    {
-                      value: 'Idaho',
-                      overrideValue: 'ID',
-                    },
-                    {
-                      value: 'Illinois',
-                      overrideValue: 'IL',
-                    },
-                    {
-                      value: 'Indiana',
-                      overrideValue: 'IN',
-                    },
-                    {
-                      value: 'Iowa',
-                      overrideValue: 'IA',
-                    },
-                    {
-                      value: 'Kansas',
-                      overrideValue: 'KS',
-                    },
-                    {
-                      value: 'Kentucky',
-                      overrideValue: 'KY',
-                    },
-                    {
-                      value: 'Louisiana',
-                      overrideValue: 'LA',
-                    },
-                    {
-                      value: 'Maine',
-                      overrideValue: 'ME',
-                    },
-                    {
-                      value: 'Marshall Islands',
-                      overrideValue: 'MH',
-                    },
-                    {
-                      value: 'Maryland',
-                      overrideValue: 'MD',
-                    },
-                    {
-                      value: 'Massachusetts',
-                      overrideValue: 'MA',
-                    },
-                    {
-                      value: 'Michigan',
-                      overrideValue: 'MI',
-                    },
-                    {
-                      value: 'Minnesota',
-                      overrideValue: 'MN',
-                    },
-                    {
-                      value: 'Mississippi',
-                      overrideValue: 'MS',
-                    },
-                    {
-                      value: 'Missouri',
-                      overrideValue: 'MO',
-                    },
-                    {
-                      value: 'Montana',
-                      overrideValue: 'MT',
-                    },
-                    {
-                      value: 'Nebraska',
-                      overrideValue: 'NE',
-                    },
-                    {
-                      value: 'Nevada',
-                      overrideValue: 'NV',
-                    },
-                    {
-                      value: 'New Hampshire',
-                      overrideValue: 'NH',
-                    },
-                    {
-                      value: 'New Jersey',
-                      overrideValue: 'NJ',
-                    },
-                    {
-                      value: 'New Mexico',
-                      overrideValue: 'NM',
-                    },
-                    {
-                      value: 'New York',
-                      overrideValue: 'NY',
-                    },
-                    {
-                      value: 'North Carolina',
-                      overrideValue: 'NC',
-                    },
-                    {
-                      value: 'North Dakota',
-                      overrideValue: 'ND',
-                    },
-                    {
-                      value: 'Northern Mariana Islands',
-                      overrideValue: 'MP',
-                    },
-                    {
-                      value: 'Ohio',
-                      overrideValue: 'OH',
-                    },
-                    {
-                      value: 'Oklahoma',
-                      overrideValue: 'OK',
-                    },
-                    {
-                      value: 'Oregon',
-                      overrideValue: 'OR',
-                    },
-                    {
-                      value: 'Palau',
-                      overrideValue: 'PW',
-                    },
-                    {
-                      value: 'Pennsylvania',
-                      overrideValue: 'PA',
-                    },
-                    {
-                      value: 'Puerto Rico',
-                      overrideValue: 'PR',
-                    },
-                    {
-                      value: 'Rhode Island',
-                      overrideValue: 'RI',
-                    },
-                    {
-                      value: 'South Carolina',
-                      overrideValue: 'SC',
-                    },
-                    {
-                      value: 'South Dakota',
-                      overrideValue: 'SD',
-                    },
-                    {
-                      value: 'Tennessee',
-                      overrideValue: 'TN',
-                    },
-                    {
-                      value: 'Texas',
-                      overrideValue: 'TX',
-                    },
-                    {
-                      value: 'Utah',
-                      overrideValue: 'UT',
-                    },
-                    {
-                      value: 'Vermont',
-                      overrideValue: 'VT',
-                    },
-                    {
-                      value: 'Virgin Islands',
-                      overrideValue: 'VI',
-                    },
-                    {
-                      value: 'Virginia',
-                      overrideValue: 'VA',
-                    },
-                    {
-                      value: 'Washington',
-                      overrideValue: 'WA',
-                    },
-                    {
-                      value: 'West Virginia',
-                      overrideValue: 'WV',
-                    },
-                    {
-                      value: 'Wisconsin',
-                      overrideValue: 'WI',
-                    },
-                    {
-                      value: 'Wyoming',
-                      overrideValue: 'WY',
-                    },
-                  ]}
-                  messageIfNoData="Pas de données trouvées"
-                  liftingDropDownValueUp={handleStateDropdown}
-                  {...register('state', { required: false, maxLength: 255 })}
-                />
-              </Suspense>
+                  },
+                  {
+                    value: 'Alaska',
+                    overrideValue: 'AK',
+                  },
+                  {
+                    value: 'American Samoa',
+                    overrideValue: 'AS',
+                  },
+                  {
+                    value: 'Arizona',
+                    overrideValue: 'AZ',
+                  },
+                  {
+                    value: 'Arkansas',
+                    overrideValue: 'AR',
+                  },
+                  {
+                    value: 'California',
+                    overrideValue: 'CA',
+                  },
+                  {
+                    value: 'Colorado',
+                    overrideValue: 'CO',
+                  },
+                  {
+                    value: 'Connecticut',
+                    overrideValue: 'CT',
+                  },
+                  {
+                    value: 'Delaware',
+                    overrideValue: 'DE',
+                  },
+                  {
+                    value: 'District Of Columbia',
+                    overrideValue: 'DC',
+                  },
+                  {
+                    value: 'Federated States Of Micronesia',
+                    overrideValue: 'FM',
+                  },
+                  {
+                    value: 'Florida',
+                    overrideValue: 'FL',
+                  },
+                  {
+                    value: 'Georgia',
+                    overrideValue: 'GA',
+                  },
+                  {
+                    value: 'Guam',
+                    overrideValue: 'GU',
+                  },
+                  {
+                    value: 'Hawaii',
+                    overrideValue: 'HI',
+                  },
+                  {
+                    value: 'Idaho',
+                    overrideValue: 'ID',
+                  },
+                  {
+                    value: 'Illinois',
+                    overrideValue: 'IL',
+                  },
+                  {
+                    value: 'Indiana',
+                    overrideValue: 'IN',
+                  },
+                  {
+                    value: 'Iowa',
+                    overrideValue: 'IA',
+                  },
+                  {
+                    value: 'Kansas',
+                    overrideValue: 'KS',
+                  },
+                  {
+                    value: 'Kentucky',
+                    overrideValue: 'KY',
+                  },
+                  {
+                    value: 'Louisiana',
+                    overrideValue: 'LA',
+                  },
+                  {
+                    value: 'Maine',
+                    overrideValue: 'ME',
+                  },
+                  {
+                    value: 'Marshall Islands',
+                    overrideValue: 'MH',
+                  },
+                  {
+                    value: 'Maryland',
+                    overrideValue: 'MD',
+                  },
+                  {
+                    value: 'Massachusetts',
+                    overrideValue: 'MA',
+                  },
+                  {
+                    value: 'Michigan',
+                    overrideValue: 'MI',
+                  },
+                  {
+                    value: 'Minnesota',
+                    overrideValue: 'MN',
+                  },
+                  {
+                    value: 'Mississippi',
+                    overrideValue: 'MS',
+                  },
+                  {
+                    value: 'Missouri',
+                    overrideValue: 'MO',
+                  },
+                  {
+                    value: 'Montana',
+                    overrideValue: 'MT',
+                  },
+                  {
+                    value: 'Nebraska',
+                    overrideValue: 'NE',
+                  },
+                  {
+                    value: 'Nevada',
+                    overrideValue: 'NV',
+                  },
+                  {
+                    value: 'New Hampshire',
+                    overrideValue: 'NH',
+                  },
+                  {
+                    value: 'New Jersey',
+                    overrideValue: 'NJ',
+                  },
+                  {
+                    value: 'New Mexico',
+                    overrideValue: 'NM',
+                  },
+                  {
+                    value: 'New York',
+                    overrideValue: 'NY',
+                  },
+                  {
+                    value: 'North Carolina',
+                    overrideValue: 'NC',
+                  },
+                  {
+                    value: 'North Dakota',
+                    overrideValue: 'ND',
+                  },
+                  {
+                    value: 'Northern Mariana Islands',
+                    overrideValue: 'MP',
+                  },
+                  {
+                    value: 'Ohio',
+                    overrideValue: 'OH',
+                  },
+                  {
+                    value: 'Oklahoma',
+                    overrideValue: 'OK',
+                  },
+                  {
+                    value: 'Oregon',
+                    overrideValue: 'OR',
+                  },
+                  {
+                    value: 'Palau',
+                    overrideValue: 'PW',
+                  },
+                  {
+                    value: 'Pennsylvania',
+                    overrideValue: 'PA',
+                  },
+                  {
+                    value: 'Puerto Rico',
+                    overrideValue: 'PR',
+                  },
+                  {
+                    value: 'Rhode Island',
+                    overrideValue: 'RI',
+                  },
+                  {
+                    value: 'South Carolina',
+                    overrideValue: 'SC',
+                  },
+                  {
+                    value: 'South Dakota',
+                    overrideValue: 'SD',
+                  },
+                  {
+                    value: 'Tennessee',
+                    overrideValue: 'TN',
+                  },
+                  {
+                    value: 'Texas',
+                    overrideValue: 'TX',
+                  },
+                  {
+                    value: 'Utah',
+                    overrideValue: 'UT',
+                  },
+                  {
+                    value: 'Vermont',
+                    overrideValue: 'VT',
+                  },
+                  {
+                    value: 'Virgin Islands',
+                    overrideValue: 'VI',
+                  },
+                  {
+                    value: 'Virginia',
+                    overrideValue: 'VA',
+                  },
+                  {
+                    value: 'Washington',
+                    overrideValue: 'WA',
+                  },
+                  {
+                    value: 'West Virginia',
+                    overrideValue: 'WV',
+                  },
+                  {
+                    value: 'Wisconsin',
+                    overrideValue: 'WI',
+                  },
+                  {
+                    value: 'Wyoming',
+                    overrideValue: 'WY',
+                  },
+                ]}
+                messageIfNoData="No data found"
+                liftingDropDownValueUp={handleStateDropdown}
+              />
               {errors.state && (
                 <StyledErrors>The state's maximum length is 255.</StyledErrors>
               )}
@@ -644,26 +661,19 @@ function Home() {
           </fieldset>
           <InputWrapper>
             <label id="department">Department</label>
-            <Suspense
-              fallback={
-                <StyledDropdownLoading>loading...</StyledDropdownLoading>
-              }
-            >
-              <Dropdown
-                labelId="department"
-                defaultValue={{ value: 'Marketing' }}
-                data={[
-                  { value: 'Sales' },
-                  { value: 'Marketing' },
-                  { value: 'Engineering' },
-                  { value: 'Human Resources' },
-                  { value: 'Legal' },
-                ]}
-                messageIfNoData="Pas de données trouvées"
-                liftingDropDownValueUp={handleDepartmentDropdown}
-                {...register('department', { required: false, maxLength: 255 })}
-              />
-            </Suspense>
+            <Dropdown
+              labelId="department"
+              defaultValue={{ value: 'Marketing' }}
+              data={[
+                { value: 'Sales' },
+                { value: 'Marketing' },
+                { value: 'Engineering' },
+                { value: 'Human Resources' },
+                { value: 'Legal' },
+              ]}
+              messageIfNoData="No data found"
+              liftingDropDownValueUp={handleDepartmentDropdown}
+            />
             {errors.department && (
               <StyledErrors>
                 The department's maximum length is 255.
