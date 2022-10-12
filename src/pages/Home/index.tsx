@@ -114,7 +114,7 @@ function Home() {
     setIsOpen(false)
   }
 
-  // dateOfBirthPicker
+  // dateOfBirthPicker with controls
   const [dateOfBirthPicker, setDateOfBirthPicker] = useState(new Date())
   const handleDateOfBirthSelected = (value: Date) => {
     if (value.toLocaleDateString('en-US', dateOptions).match(regexUSDate)) {
@@ -123,7 +123,7 @@ function Home() {
     setDateOfBirthPicker(value ? value : new Date())
   }
 
-  // startDatePicker
+  // startDatePicker with controls
   const [startDatePicker, setStartDatePicker] = useState(new Date())
   const handleStartDateSelected = (value: Date) => {
     if (value.toLocaleDateString('en-US', dateOptions).match(regexUSDate)) {
@@ -135,7 +135,7 @@ function Home() {
   // state dropdown with controls
   const [stateValue, setStateValue] = useState('')
   const handleStateDropdown = (value: string) => {
-    if (value.length >= 255) {
+    if (value.length >= 255 || !value.match(regexTextAndNumbers)) {
       setError('state', {})
     } else clearErrors('state')
     setStateValue(value ? value : '')
@@ -144,7 +144,7 @@ function Home() {
   // department dropdown with controls
   const [departmentValue, setDepartmentValue] = useState('')
   const handleDepartmentDropdown = (value: string) => {
-    if (value.length >= 255) {
+    if (value.length >= 255 || !value.match(regexTextAndNumbers)) {
       setError('department', {})
     } else clearErrors('department')
     setDepartmentValue(value ? value : '')
@@ -637,7 +637,7 @@ function Home() {
                 liftingDropDownValueUp={handleStateDropdown}
               />
               {errors.state && (
-                <StyledErrors>The state's maximum length is 255.</StyledErrors>
+                <StyledErrors>The state's maximum length is 255 (only characters and numbers allowed).</StyledErrors>
               )}
             </InputWrapper>
             <InputWrapper>
@@ -676,7 +676,7 @@ function Home() {
             />
             {errors.department && (
               <StyledErrors>
-                The department's maximum length is 255.
+                The department's maximum length is 255 (only characters and numbers allowed).
               </StyledErrors>
             )}
           </InputWrapper>
