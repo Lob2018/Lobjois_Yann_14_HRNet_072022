@@ -1,10 +1,20 @@
 import employeesService from '../../components/services/employees.service'
+import styled from 'styled-components'
 
 import { useSelector, useDispatch } from 'react-redux'
 import { selectEmployees } from '../../store/selectors'
 import * as employeesActions from '../../features/employees'
 
 import MUIDataTable, { MUIDataTableOptions } from 'mui-datatables'
+
+const StyledH1 = styled.h1`
+  margin-bottom: 2rem;
+  font-size: 2em;
+  @media (max-width: 480px) {
+    margin-top: 0px;
+    font-size: 1.5em;
+  }
+`
 
 function Employees() {
   const dispatch = useDispatch()
@@ -43,20 +53,15 @@ function Employees() {
 
   return (
     <main className="main bg-dark">
-      <>
-        <div className="header">
-          <h1>
-            Current Employees
-            <br />
-          </h1>
-          <MUIDataTable
-            title={''}
-            data={employees.map((el) => Object.values(el))}
-            columns={columns}
-            options={options}
-          />
-        </div>
-      </>
+      <div className="header">
+        <StyledH1>Current Employees</StyledH1>
+        <MUIDataTable
+          title={''}
+          data={employees.map((el) => Object.values(el))}
+          columns={columns}
+          options={options}
+        />
+      </div>
     </main>
   )
 }

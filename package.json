@@ -5,6 +5,7 @@
   "dependencies": {
     "@emotion/react": "^11.10.4",
     "@emotion/styled": "^11.10.4",
+    "@loadable/component": "^5.15.2",
     "@mui/icons-material": "^5.10.6",
     "@mui/material": "^5.10.8",
     "@reduxjs/toolkit": "^1.8.3",
@@ -12,6 +13,7 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "@types/jest": "^27.5.2",
+    "@types/loadable__component": "^5.13.4",
     "@types/mui-datatables": "^3.7.9",
     "@types/node": "^16.11.64",
     "@types/react": "^18.0.21",

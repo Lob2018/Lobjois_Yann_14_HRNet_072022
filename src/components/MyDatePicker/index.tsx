@@ -1,12 +1,8 @@
 import DatePicker from 'react-datepicker'
 import { useState } from 'react'
+import DatePickerProps from '../../interfaces/datepicker.props.interface'
 
-interface Props {
-  id: string
-  liftingDatePickerValueUp: (value: Date) => void
-}
-
-function MyDatePicker(props: Props) {
+function MyDatePicker(props: DatePickerProps) {
   const [date, setDate] = useState(new Date())
   const handleSetDate = (value: Date) => {
     setDate(value)
