@@ -3,7 +3,7 @@ import colors from '../../utils/style/colors'
 
 const StyledGlobalStyle = createGlobalStyle`
     html {
-      font-family: Avenir, Helvetica, Arial, sans-serif;
+      font-family: Arial, sans-serif;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
       text-align: center;
@@ -56,7 +56,6 @@ const StyledGlobalStyle = createGlobalStyle`
     }
 
     .header {
-      color: #fff;
       margin: 2rem ;
     }
 

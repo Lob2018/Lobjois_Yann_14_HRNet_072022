@@ -1,15 +1,22 @@
 import styled from 'styled-components'
 import { StyledLink } from '../../utils/style/Atoms'
 
+const LogoStyled = styled.div`
+  font-size: 1.5em;
+  margin-block-start: 0.83em;
+  margin-block-end: 0.83em;
+  font-weight: bold;
+`
+
 const NavContainer = styled.nav`
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 5px 20px;
-  background-color:#12002b;
+  background-color: #12002b;
   a {
     font-weight: bold;
-    color: #FFF;
+    color: #fff;
   }
 `
 const StyledNavDiv = styled.div`
@@ -22,7 +29,7 @@ function Header() {
   return (
     <NavContainer>
       <StyledLink to="/">
-        <h1>HRnet</h1>
+        <LogoStyled>HRnet</LogoStyled>
       </StyledLink>
       <StyledNavDiv>
         <StyledLink to="/">
