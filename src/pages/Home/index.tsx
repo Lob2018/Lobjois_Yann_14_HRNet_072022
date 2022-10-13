@@ -13,8 +13,16 @@ import * as employeesActions from '../../features/employees'
 import Employee from '../../classes/employee.class'
 
 import Dropdown from 'react-dropdown-component-library'
+import STATES from '../../data/states'
+import DEPARTMENTS from '../../data/departments'
+
 import MyDatePicker from '../../components/MyDatePicker'
 import Modal from 'react-modal'
+
+import REGEXUSDATE from '../../utils/regex/regexUSDate'
+import REGEXTEXT from '../../utils/regex/regexText'
+import REGEXTEXTANDNUMBERS from '../../utils/regex/regexTextAndNumbers'
+import REGEXUSZIPCODES from '../../utils/regex/regexUSZipCodes'
 
 const SectionContainer = styled.section`
   box-sizing: border-box;
@@ -24,11 +32,17 @@ const SectionContainer = styled.section`
   padding: 2rem;
   @media (max-width: 480px) {
     width: calc(100vw / 1.2);
+    margin: 0rem auto;
   }
 `
 
 const StyledH1 = styled.h1`
   margin-bottom: 2rem;
+  font-size: 2em;
+  @media (max-width: 480px) {
+    margin-top: 0px;
+    font-size: 1.5em;
+  }
 `
 
 const InputWrapper = styled.div`
@@ -71,16 +85,6 @@ const StyledModalCloseButton = styled.a`
 const StyledModalText = styled.div`
   text-align: left;
 `
-
-// const StyledDateLoading = styled.div`
-//   font-size: 1.2rem;
-//   padding: 7px;
-// `
-// const StyledDropdownLoading = styled.div`
-//   font-size: 1em;
-//   padding: 15px;
-// `
-
 const customStyles = {
   overlay: {
     backgroundColor: 'rgba(0,0,0,0.75)',
@@ -117,7 +121,7 @@ function Home() {
   // dateOfBirthPicker with controls
   const [dateOfBirthPicker, setDateOfBirthPicker] = useState(new Date())
   const handleDateOfBirthSelected = (value: Date) => {
-    if (value.toLocaleDateString('en-US', dateOptions).match(regexUSDate)) {
+    if (value.toLocaleDateString('en-US', dateOptions).match(REGEXUSDATE)) {
       clearErrors('dateOfBirth')
     } else setError('dateOfBirth', {})
     setDateOfBirthPicker(value ? value : new Date())
@@ -126,7 +130,7 @@ function Home() {
   // startDatePicker with controls
   const [startDatePicker, setStartDatePicker] = useState(new Date())
   const handleStartDateSelected = (value: Date) => {
-    if (value.toLocaleDateString('en-US', dateOptions).match(regexUSDate)) {
+    if (value.toLocaleDateString('en-US', dateOptions).match(REGEXUSDATE)) {
       clearErrors('startDate')
     } else setError('startDate', {})
     setStartDatePicker(value ? value : new Date())
@@ -135,7 +139,7 @@ function Home() {
   // state dropdown with controls
   const [stateValue, setStateValue] = useState('')
   const handleStateDropdown = (value: string) => {
-    if (value.length >= 255 || !value.match(regexTextAndNumbers)) {
+    if (value.length >= 255 || !value.match(REGEXTEXTANDNUMBERS)) {
       setError('state', {})
     } else clearErrors('state')
     setStateValue(value ? value : '')
@@ -144,7 +148,7 @@ function Home() {
   // department dropdown with controls
   const [departmentValue, setDepartmentValue] = useState('')
   const handleDepartmentDropdown = (value: string) => {
-    if (value.length >= 255 || !value.match(regexTextAndNumbers)) {
+    if (value.length >= 255 || !value.match(REGEXTEXTANDNUMBERS)) {
       setError('department', {})
     } else clearErrors('department')
     setDepartmentValue(value ? value : '')
@@ -164,21 +168,11 @@ function Home() {
     formState: { errors },
   } = useForm()
 
-  // regex for dates as MM/DD/YYYY
-  const regexUSDate = new RegExp(
-    /^(0[1-9]|1[0-2])\/(0[1-9]|[12]\d|3[01])\/\d{4}$/
-  )
   const dateOptions: Intl.DateTimeFormatOptions = {
     month: '2-digit',
     day: '2-digit',
     year: 'numeric',
   }
-  // regex for whitespace and accented characters (a-z A-Z, spaces, hyphens, and ISO Latin1 decimal code 192 à 383)
-  const regexText = new RegExp(/^[a-zA-Z\u00C0-\u017F\s\\-]+$/)
-  // same with numbers
-  const regexTextAndNumbers = new RegExp(/^[a-zA-Z0-9\u00C0-\u017F\s\\-]+$/)
-  // regex for US zip codes as 12345 or 12345-6789
-  const regexUSZipCodes = new RegExp(/^\d{5}(?:-\d{4})?$/)
 
   const onSubmit = async (data: Record<string, string>) => {
     const city = data.city || ''
@@ -198,45 +192,45 @@ function Home() {
       .then(async ({ MySchemaValidator }) => {
         const schema = MySchemaValidator.object({
           city: MySchemaValidator.string()
-            .pattern(regexText)
+            .pattern(REGEXTEXT)
             .optional()
             .allow(null, '')
             .max(255),
           dateOfBirth: MySchemaValidator.string()
-            .pattern(regexUSDate)
+            .pattern(REGEXUSDATE)
             .optional()
             .allow(null, ''),
           department: MySchemaValidator.string()
-            .pattern(regexTextAndNumbers)
+            .pattern(REGEXTEXTANDNUMBERS)
             .optional()
             .allow(null, '')
             .max(255),
           firstName: MySchemaValidator.string()
-            .pattern(regexText)
+            .pattern(REGEXTEXT)
             .optional()
             .allow(null, '')
             .max(255),
           lastName: MySchemaValidator.string()
-            .pattern(regexText)
+            .pattern(REGEXTEXT)
             .optional()
             .allow(null, '')
             .max(255),
           startDate: MySchemaValidator.string()
-            .pattern(regexUSDate)
+            .pattern(REGEXUSDATE)
             .optional()
             .allow(null, ''),
           state: MySchemaValidator.string()
-            .pattern(regexTextAndNumbers)
+            .pattern(REGEXTEXTANDNUMBERS)
             .optional()
             .allow(null, '')
             .max(255),
           street: MySchemaValidator.string()
-            .pattern(regexTextAndNumbers)
+            .pattern(REGEXTEXTANDNUMBERS)
             .optional()
             .allow(null, '')
             .max(255),
           zipCode: MySchemaValidator.string()
-            .pattern(regexUSZipCodes)
+            .pattern(REGEXUSZIPCODES)
             .optional()
             .allow(null, '')
             .max(32),
@@ -294,15 +288,15 @@ function Home() {
               {...register('firstName', {
                 required: false,
                 maxLength: 255,
-                pattern: regexText,
+                pattern: REGEXTEXT,
               })}
             />
-            {errors.firstName && (
+            {errors.firstName ? (
               <StyledErrors>
                 The first name's maximum length is 255, and must only contain
                 text.
               </StyledErrors>
-            )}
+            ) : null}
           </InputWrapper>
           <InputWrapper>
             <label htmlFor="lastName">Last Name</label>
@@ -312,15 +306,15 @@ function Home() {
               {...register('lastName', {
                 required: false,
                 maxLength: 255,
-                pattern: regexText,
+                pattern: REGEXTEXT,
               })}
             />
-            {errors.lastName && (
+            {errors.lastName ? (
               <StyledErrors>
                 The last name's maximum length is 255, and must only contain
                 text.
               </StyledErrors>
-            )}
+            ) : null}
           </InputWrapper>
           <InputWrapper>
             <label htmlFor="dateOfBirth">Date of Birth</label>
@@ -330,11 +324,11 @@ function Home() {
               }}
               id="dateOfBirth"
             />
-            {errors.dateOfBirth && (
+            {errors.dateOfBirth ? (
               <StyledErrors>
                 The date of birth format is MM/DD/YYYY.
               </StyledErrors>
-            )}
+            ) : null}
           </InputWrapper>
           <InputWrapper>
             <label htmlFor="startDate">Start Date</label>
@@ -344,11 +338,9 @@ function Home() {
               }}
               id="startDate"
             />
-            {errors.startDate && (
-              <StyledErrors>
-                The start date format is MM/DD/YYYY.
-              </StyledErrors>
-            )}
+            {errors.startDate ? (
+              <StyledErrors>The start date format is MM/DD/YYYY.</StyledErrors>
+            ) : null}
           </InputWrapper>
           <fieldset className="fieldset-employee">
             <legend>Address</legend>
@@ -360,15 +352,15 @@ function Home() {
                 {...register('street', {
                   required: false,
                   maxLength: 255,
-                  pattern: regexTextAndNumbers,
+                  pattern: REGEXTEXTANDNUMBERS,
                 })}
               />
-              {errors.street && (
+              {errors.street ? (
                 <StyledErrors>
                   The street's maximum length is 255, and must only contain text
                   and numbers.
                 </StyledErrors>
-              )}
+              ) : null}
             </InputWrapper>
             <InputWrapper>
               <label htmlFor="city">City</label>
@@ -378,14 +370,14 @@ function Home() {
                 {...register('city', {
                   required: false,
                   maxLength: 255,
-                  pattern: regexText,
+                  pattern: REGEXTEXT,
                 })}
               />
-              {errors.city && (
+              {errors.city ? (
                 <StyledErrors>
                   The city's maximum length is 255, and must only contain text.
                 </StyledErrors>
-              )}
+              ) : null}
             </InputWrapper>
             <InputWrapper>
               <label id="state">State</label>
@@ -395,250 +387,16 @@ function Home() {
                   value: 'Alabama',
                   overrideValue: 'AL',
                 }}
-                data={[
-                  {
-                    value: 'Alabama',
-                    overrideValue: 'AL',
-                  },
-                  {
-                    value: 'Alaska',
-                    overrideValue: 'AK',
-                  },
-                  {
-                    value: 'American Samoa',
-                    overrideValue: 'AS',
-                  },
-                  {
-                    value: 'Arizona',
-                    overrideValue: 'AZ',
-                  },
-                  {
-                    value: 'Arkansas',
-                    overrideValue: 'AR',
-                  },
-                  {
-                    value: 'California',
-                    overrideValue: 'CA',
-                  },
-                  {
-                    value: 'Colorado',
-                    overrideValue: 'CO',
-                  },
-                  {
-                    value: 'Connecticut',
-                    overrideValue: 'CT',
-                  },
-                  {
-                    value: 'Delaware',
-                    overrideValue: 'DE',
-                  },
-                  {
-                    value: 'District Of Columbia',
-                    overrideValue: 'DC',
-                  },
-                  {
-                    value: 'Federated States Of Micronesia',
-                    overrideValue: 'FM',
-                  },
-                  {
-                    value: 'Florida',
-                    overrideValue: 'FL',
-                  },
-                  {
-                    value: 'Georgia',
-                    overrideValue: 'GA',
-                  },
-                  {
-                    value: 'Guam',
-                    overrideValue: 'GU',
-                  },
-                  {
-                    value: 'Hawaii',
-                    overrideValue: 'HI',
-                  },
-                  {
-                    value: 'Idaho',
-                    overrideValue: 'ID',
-                  },
-                  {
-                    value: 'Illinois',
-                    overrideValue: 'IL',
-                  },
-                  {
-                    value: 'Indiana',
-                    overrideValue: 'IN',
-                  },
-                  {
-                    value: 'Iowa',
-                    overrideValue: 'IA',
-                  },
-                  {
-                    value: 'Kansas',
-                    overrideValue: 'KS',
-                  },
-                  {
-                    value: 'Kentucky',
-                    overrideValue: 'KY',
-                  },
-                  {
-                    value: 'Louisiana',
-                    overrideValue: 'LA',
-                  },
-                  {
-                    value: 'Maine',
-                    overrideValue: 'ME',
-                  },
-                  {
-                    value: 'Marshall Islands',
-                    overrideValue: 'MH',
-                  },
-                  {
-                    value: 'Maryland',
-                    overrideValue: 'MD',
-                  },
-                  {
-                    value: 'Massachusetts',
-                    overrideValue: 'MA',
-                  },
-                  {
-                    value: 'Michigan',
-                    overrideValue: 'MI',
-                  },
-                  {
-                    value: 'Minnesota',
-                    overrideValue: 'MN',
-                  },
-                  {
-                    value: 'Mississippi',
-                    overrideValue: 'MS',
-                  },
-                  {
-                    value: 'Missouri',
-                    overrideValue: 'MO',
-                  },
-                  {
-                    value: 'Montana',
-                    overrideValue: 'MT',
-                  },
-                  {
-                    value: 'Nebraska',
-                    overrideValue: 'NE',
-                  },
-                  {
-                    value: 'Nevada',
-                    overrideValue: 'NV',
-                  },
-                  {
-                    value: 'New Hampshire',
-                    overrideValue: 'NH',
-                  },
-                  {
-                    value: 'New Jersey',
-                    overrideValue: 'NJ',
-                  },
-                  {
-                    value: 'New Mexico',
-                    overrideValue: 'NM',
-                  },
-                  {
-                    value: 'New York',
-                    overrideValue: 'NY',
-                  },
-                  {
-                    value: 'North Carolina',
-                    overrideValue: 'NC',
-                  },
-                  {
-                    value: 'North Dakota',
-                    overrideValue: 'ND',
-                  },
-                  {
-                    value: 'Northern Mariana Islands',
-                    overrideValue: 'MP',
-                  },
-                  {
-                    value: 'Ohio',
-                    overrideValue: 'OH',
-                  },
-                  {
-                    value: 'Oklahoma',
-                    overrideValue: 'OK',
-                  },
-                  {
-                    value: 'Oregon',
-                    overrideValue: 'OR',
-                  },
-                  {
-                    value: 'Palau',
-                    overrideValue: 'PW',
-                  },
-                  {
-                    value: 'Pennsylvania',
-                    overrideValue: 'PA',
-                  },
-                  {
-                    value: 'Puerto Rico',
-                    overrideValue: 'PR',
-                  },
-                  {
-                    value: 'Rhode Island',
-                    overrideValue: 'RI',
-                  },
-                  {
-                    value: 'South Carolina',
-                    overrideValue: 'SC',
-                  },
-                  {
-                    value: 'South Dakota',
-                    overrideValue: 'SD',
-                  },
-                  {
-                    value: 'Tennessee',
-                    overrideValue: 'TN',
-                  },
-                  {
-                    value: 'Texas',
-                    overrideValue: 'TX',
-                  },
-                  {
-                    value: 'Utah',
-                    overrideValue: 'UT',
-                  },
-                  {
-                    value: 'Vermont',
-                    overrideValue: 'VT',
-                  },
-                  {
-                    value: 'Virgin Islands',
-                    overrideValue: 'VI',
-                  },
-                  {
-                    value: 'Virginia',
-                    overrideValue: 'VA',
-                  },
-                  {
-                    value: 'Washington',
-                    overrideValue: 'WA',
-                  },
-                  {
-                    value: 'West Virginia',
-                    overrideValue: 'WV',
-                  },
-                  {
-                    value: 'Wisconsin',
-                    overrideValue: 'WI',
-                  },
-                  {
-                    value: 'Wyoming',
-                    overrideValue: 'WY',
-                  },
-                ]}
+                data={STATES}
                 messageIfNoData="No data found"
                 liftingDropDownValueUp={handleStateDropdown}
               />
-              {errors.state && (
-                <StyledErrors>The state's maximum length is 255 (only characters and numbers allowed).</StyledErrors>
-              )}
+              {errors.state ? (
+                <StyledErrors>
+                  The state's maximum length is 255 (only characters and numbers
+                  allowed).
+                </StyledErrors>
+              ) : null}
             </InputWrapper>
             <InputWrapper>
               <label htmlFor="zipCode">Zip Code</label>
@@ -648,15 +406,15 @@ function Home() {
                 {...register('zipCode', {
                   required: false,
                   maxLength: 32,
-                  pattern: regexUSZipCodes,
+                  pattern: REGEXUSZIPCODES,
                 })}
               />
-              {errors.zipCode && (
+              {errors.zipCode ? (
                 <StyledErrors>
                   The zip code's maximum length is 32, with the US format (ex. :
                   12345 or 12345-6789)
                 </StyledErrors>
-              )}
+              ) : null}
             </InputWrapper>
           </fieldset>
           <InputWrapper>
@@ -664,28 +422,23 @@ function Home() {
             <Dropdown
               labelId="department"
               defaultValue={{ value: 'Marketing' }}
-              data={[
-                { value: 'Sales' },
-                { value: 'Marketing' },
-                { value: 'Engineering' },
-                { value: 'Human Resources' },
-                { value: 'Legal' },
-              ]}
+              data={DEPARTMENTS}
               messageIfNoData="No data found"
               liftingDropDownValueUp={handleDepartmentDropdown}
             />
-            {errors.department && (
+            {errors.department ? (
               <StyledErrors>
-                The department's maximum length is 255 (only characters and numbers allowed).
+                The department's maximum length is 255 (only characters and
+                numbers allowed).
               </StyledErrors>
-            )}
+            ) : null}
           </InputWrapper>
           <button type="submit" className="sign-in-button">
             Save
           </button>
-          {!isValidAccount && (
+          {!isValidAccount ? (
             <StyledAccountError>Unable to create employee.</StyledAccountError>
-          )}
+          ) : null}
         </form>
         <Modal
           isOpen={modalIsOpen}
