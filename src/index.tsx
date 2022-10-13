@@ -9,8 +9,8 @@ import { Provider } from 'react-redux'
 import store from './store/store'
 
 import Home from './pages/Home/index'
+import Employees from './pages/Employees/index'
 
-const Employees = lazy(() => import('./pages/Employees/index'))
 const Errors = lazy(() => import('./pages/404'))
 
 const rootElement = document.getElementById('root')
@@ -23,7 +23,7 @@ root.render(
       <Provider store={store}>
         <GlobalStyle />
         <Header />
-        <Suspense fallback={<div className="yl-loader"></div>}>
+        <Suspense fallback={null}>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/employees" element={<Employees />} />

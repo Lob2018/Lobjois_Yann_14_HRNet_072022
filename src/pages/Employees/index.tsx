@@ -1,3 +1,5 @@
+import { lazy, useMemo } from 'react'
+
 import employeesService from '../../components/services/employees.service'
 import styled from 'styled-components'
 
@@ -5,7 +7,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { selectEmployees } from '../../store/selectors'
 import * as employeesActions from '../../features/employees'
 
-import MUIDataTable, { MUIDataTableOptions } from 'mui-datatables'
+const MUIDataTable = lazy(() => import('mui-datatables'))
 
 const StyledH1 = styled.h1`
   margin-bottom: 2rem;
@@ -27,42 +29,41 @@ function Employees() {
     }
   }
 
-  const columns = [
-    'First Name',
-    'Last Name',
-    'Start Date',
-    'Department',
-    'Date of Birth',
-    'Street',
-    'City',
-    'State',
-    'Zip Code',
-  ]
-
-  const options: MUIDataTableOptions = {
-    textLabels: {
-      body: {
-        noMatch: 'No data available in table',
-      },
-    },
-    filter: true,
-    filterType: 'dropdown',
-    responsive: 'standard',
-    rowsPerPageOptions: [],
-  }
-
-  return (
-    <main className="main bg-dark">
-      <div className="header">
-        <StyledH1>Current Employees</StyledH1>
-        <MUIDataTable
-          title={''}
-          data={employees.map((el) => Object.values(el))}
-          columns={columns}
-          options={options}
-        />
-      </div>
-    </main>
+  return useMemo(
+    () => (
+      <main className="main bg-dark">
+        <div className="header">
+          <StyledH1>Current Employees</StyledH1>
+          <MUIDataTable
+            title={''}
+            data={employees.map((el) => Object.values(el))}
+            columns={[
+              'First Name',
+              'Last Name',
+              'Start Date',
+              'Department',
+              'Date of Birth',
+              'Street',
+              'City',
+              'State',
+              'Zip Code',
+            ]}
+            options={{
+              textLabels: {
+                body: {
+                  noMatch: 'No data available in table',
+                },
+              },
+              filter: true,
+              filterType: 'dropdown',
+              responsive: 'standard',
+              rowsPerPageOptions: [],
+            }}
+          />
+        </div>
+      </main>
+    ),
+    [employees]
   )
 }
 
