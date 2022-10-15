@@ -395,7 +395,7 @@ function Home() {
             <StyledAccountError>Unable to create employee.</StyledAccountError>
           ) : null}
         </form>
-        <MyModal />
+        <MyModal ariaLabel="Employee created" textContent="Employee created!" />
       </SectionContainer>
     </main>
   )

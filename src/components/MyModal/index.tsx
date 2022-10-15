@@ -1,4 +1,5 @@
 import Modal from 'react-modal'
+import ModalProps from '../../interfaces/modal.props.interface'
 
 import styled from 'styled-components'
 
@@ -46,7 +47,7 @@ const customStyles = {
 }
 Modal.setAppElement('#root')
 
-function MyModal() {
+function MyModal(props: ModalProps) {
   const dispatch = useDispatch()
   const isOpen = useSelector(selectModalCreateEmployee)
 
@@ -66,12 +67,12 @@ function MyModal() {
       isOpen={modalIsOpen}
       onRequestClose={closeModal}
       style={customStyles}
-      contentLabel="Employee created"
+      contentLabel={props.ariaLabel}
     >
       <StyledModalCloseButton onClick={closeModal}>
         Close
       </StyledModalCloseButton>
-      <StyledModalText>Employee created!</StyledModalText>
+      <StyledModalText>{props.textContent}</StyledModalText>
     </Modal>
   )
 }
