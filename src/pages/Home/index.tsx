@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { lazy, useState } from 'react'
 
 import styled from 'styled-components'
 
@@ -9,6 +9,7 @@ import employeesService from '../../components/services/employees.service'
 import { useDispatch } from 'react-redux'
 import * as loadingActions from '../../features/loading'
 import * as employeesActions from '../../features/employees'
+import * as modalCreateEmployeeActions from '../../features/modalCreateEmployee'
 
 import Employee from '../../classes/employee.class'
 
@@ -17,12 +18,14 @@ import STATES from '../../data/states'
 import DEPARTMENTS from '../../data/departments'
 
 import MyDatePicker from '../../components/MyDatePicker'
-import Modal from 'react-modal'
 
 import REGEXUSDATE from '../../utils/regex/regexUSDate'
 import REGEXTEXT from '../../utils/regex/regexText'
 import REGEXTEXTANDNUMBERS from '../../utils/regex/regexTextAndNumbers'
 import REGEXUSZIPCODES from '../../utils/regex/regexUSZipCodes'
+import DATEFORMATMMDDYYYY from '../../utils/date/formatMMDDYYYY'
+
+const MyModal = lazy(() => import('../../components/MyModal'))
 
 const SectionContainer = styled.section`
   box-sizing: border-box;
@@ -69,59 +72,16 @@ const StyledAccountError = styled.p`
   font-size: 12px;
   margin: 16px 0 0 0;
 `
-const StyledModalCloseButton = styled.a`
-  position: absolute;
-  top: -12.5px;
-  right: -12.5px;
-  display: block;
-  width: 30px;
-  height: 30px;
-  text-indent: -9999px;
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center center;
-  background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAYAAAA6/NlyAAAAAXNSR0IArs4c6QAAA3hJREFUaAXlm8+K00Acx7MiCIJH/yw+gA9g25O49SL4AO3Bp1jw5NvktC+wF88qevK4BU97EmzxUBCEolK/n5gp3W6TTJPfpNPNF37MNsl85/vN/DaTmU6PknC4K+pniqeKJ3k8UnkvDxXJzzy+q/yaxxeVHxW/FNHjgRSeKt4rFoplzaAuHHDBGR2eS9G54reirsmienDCTRt7xwsp+KAoEmt9nLaGitZxrBbPFNaGfPloGw2t4JVamSt8xYW6Dg1oCYo3Yv+rCGViV160oMkcd8SYKnYV1Nb1aEOjCe6L5ZOiLfF120EjWhuBu3YIZt1NQmujnk5F4MgOpURzLfAwOBSTmzp3fpDxuI/pabxpqOoz2r2HLAb0GMbZKlNV5/Hg9XJypguryA7lPF5KMdTZQzHjqxNPhWhzIuAruOl1eNqKEx1tSh5rfbxdw7mOxCq4qS68ZTjKS1YVvilu559vWvFHhh4rZrdyZ69Vmpgdj8fJbDZLJpNJ0uv1cnr/gjrUhQMuI+ANjyuwftQ0bbL6Erp0mM/ny8Fg4M3LtdRxgMtKl3jwmIHVxYXChFy94/Rmpa/pTbNUhstKV+4Rr8lLQ9KlUvJKLyG8yvQ2s9SBy1Jb7jV5a0yapfF6apaZLjLLcWtd4sNrmJUMHyM+1xibTjH82Zh01TNlhsrOhdKTe00uAzZQmN6+KW+sDa/JD2PSVQ873m29yf+1Q9VDzfEYlHi1G5LKBBWZbtEsHbFwb1oYDwr1ZiF/2bnCSg1OBE/pfr9/bWx26UxJL3ONPISOLKUvQza0LZUxSKyjpdTGa/vDEr25rddbMM0Q3O6Lx3rqFvU+x6UrRKQY7tyrZecmD9FODy8uLizTmilwNj0kraNcAJhOp5aGVwsAGD5VmJBrWWbJSgWT9zrzWepQF47RaGSiKfeGx6Szi3gzmX/HHbihwBser4B9UJYpFBNX4R6vTn3VQnez0SymnrHQMsRYGTr1dSk34ljRqS/EMd2pLQ8YBp3a1PLfcqCpo8gtHkZFHKkTX6fs3MY0blKnth66rKCnU0VRGu37ONrQaA4eZDFtWAu2fXj9zjFkxTBOo8F7t926gTp/83Kyzzcy2kZD6xiqxTYnHLRFm3vHiRSwNSjkz3hoIzo8lCKWUlg/YtGs7tObunDAZfpDLbfEI15zsEIY3U/x/gHHc/G1zltnAgAAAABJRU5ErkJggg==');
-`
-const StyledModalText = styled.div`
-  text-align: left;
-`
-const customStyles = {
-  overlay: {
-    backgroundColor: 'rgba(0,0,0,0.75)',
-  },
-  content: {
-    top: '50%',
-    left: '50%',
-    right: 'auto',
-    bottom: 'auto',
-    marginRight: '-50%',
-    transform: 'translate(-50%, -50%)',
-    borderRadius: '8px',
-    boxShadow: '0 0 10px #000',
-    width: '70%',
-    maxWidth: '500px',
-    border: 'none',
-    overflow: 'inherit',
-  },
-}
-Modal.setAppElement('#root')
 
 function Home() {
   const dispatch = useDispatch()
 
-  // modal
-  const [modalIsOpen, setIsOpen] = useState(false)
-  function openModal() {
-    setIsOpen(true)
-  }
-  function closeModal() {
-    setIsOpen(false)
-  }
-
   // dateOfBirthPicker with controls
   const [dateOfBirthPicker, setDateOfBirthPicker] = useState(new Date())
   const handleDateOfBirthSelected = (value: Date) => {
-    if (value.toLocaleDateString('en-US', dateOptions).match(REGEXUSDATE)) {
+    if (
+      value.toLocaleDateString('en-US', DATEFORMATMMDDYYYY).match(REGEXUSDATE)
+    ) {
       clearErrors('dateOfBirth')
     } else setError('dateOfBirth', {})
     setDateOfBirthPicker(value ? value : new Date())
@@ -130,7 +90,9 @@ function Home() {
   // startDatePicker with controls
   const [startDatePicker, setStartDatePicker] = useState(new Date())
   const handleStartDateSelected = (value: Date) => {
-    if (value.toLocaleDateString('en-US', dateOptions).match(REGEXUSDATE)) {
+    if (
+      value.toLocaleDateString('en-US', DATEFORMATMMDDYYYY).match(REGEXUSDATE)
+    ) {
       clearErrors('startDate')
     } else setError('startDate', {})
     setStartDatePicker(value ? value : new Date())
@@ -168,26 +130,20 @@ function Home() {
     formState: { errors },
   } = useForm()
 
-  const dateOptions: Intl.DateTimeFormatOptions = {
-    month: '2-digit',
-    day: '2-digit',
-    year: 'numeric',
-  }
-
   const onSubmit = async (data: Record<string, string>) => {
     const city = data.city || ''
     const dateOfBirth =
-      dateOfBirthPicker.toLocaleDateString('en-US', dateOptions) || ''
+      dateOfBirthPicker.toLocaleDateString('en-US', DATEFORMATMMDDYYYY) || ''
     const department = departmentValue || ''
     const firstName = data.firstName || ''
     const lastName = data.lastName || ''
     const startDate =
-      startDatePicker.toLocaleDateString('en-US', dateOptions) || ''
+      startDatePicker.toLocaleDateString('en-US', DATEFORMATMMDDYYYY) || ''
     const state = stateValue || ''
     const street = data.street || ''
     const zipCode = data.zipCode || ''
 
-    // the joi code splitting loading on submit
+    // the joi code splitting loading on submit (CRA dynamic import)
     import('../../components/MySchemaValidator')
       .then(async ({ MySchemaValidator }) => {
         const schema = MySchemaValidator.object({
@@ -260,7 +216,7 @@ function Home() {
               employeesActions.saveEmployee(employeesService.allEmployees())
             )
             dispatch(loadingActions.set(false))
-            openModal()
+            dispatch(modalCreateEmployeeActions.set(true))
           } catch (e) {
             checkAccountValidity(false)
             dispatch(loadingActions.set(false))
@@ -440,17 +396,7 @@ function Home() {
             <StyledAccountError>Unable to create employee.</StyledAccountError>
           ) : null}
         </form>
-        <Modal
-          isOpen={modalIsOpen}
-          onRequestClose={closeModal}
-          style={customStyles}
-          contentLabel="Employee created"
-        >
-          <StyledModalCloseButton onClick={closeModal}>
-            Close
-          </StyledModalCloseButton>
-          <StyledModalText>Employee created!</StyledModalText>
-        </Modal>
+        <MyModal />
       </SectionContainer>
     </main>
   )
