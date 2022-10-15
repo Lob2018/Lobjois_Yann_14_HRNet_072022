@@ -17,14 +17,13 @@ import Dropdown from 'react-dropdown-component-library'
 import STATES from '../../data/states'
 import DEPARTMENTS from '../../data/departments'
 
-import MyDatePicker from '../../components/MyDatePicker'
-
 import REGEXUSDATE from '../../utils/regex/regexUSDate'
 import REGEXTEXT from '../../utils/regex/regexText'
 import REGEXTEXTANDNUMBERS from '../../utils/regex/regexTextAndNumbers'
 import REGEXUSZIPCODES from '../../utils/regex/regexUSZipCodes'
 import DATEFORMATMMDDYYYY from '../../utils/date/formatMMDDYYYY'
 
+const MyDatePicker = lazy(() => import('../../components/MyDatePicker'))
 const MyModal = lazy(() => import('../../components/MyModal'))
 
 const SectionContainer = styled.section`
