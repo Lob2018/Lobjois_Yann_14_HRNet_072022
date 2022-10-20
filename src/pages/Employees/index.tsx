@@ -53,10 +53,14 @@ function Employees() {
                 noMatch: 'No data available in table',
               },
             },
-            filter: true,
-            filterType: 'dropdown',
+            filter: false,
             responsive: 'standard',
             rowsPerPageOptions: [],
+            download: false,
+            print: false,
+            viewColumns: false,
+            selectableRowsHeader: false,
+            selectableRows: 'none',
           }}
         />
       </div>
