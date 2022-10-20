@@ -1,52 +1,54 @@
 import joi from 'joi'
 
-import REGEXUSDATE from '../../utils/regex/regexUSDate'
-import REGEXTEXT from '../../utils/regex/regexText'
-import REGEXTEXTANDNUMBERS from '../../utils/regex/regexTextAndNumbers'
-import REGEXUSZIPCODES from '../../utils/regex/regexUSZipCodes'
+import {
+  regexUSDate,
+  regexText,
+  regexTextAndNumbers,
+  regexUSZipCodes,
+} from '../../utils/regex'
 
 const MySchemaValidator = joi
 const schema = MySchemaValidator.object({
   city: MySchemaValidator.string()
-    .pattern(REGEXTEXT)
+    .pattern(regexText)
     .optional()
     .allow(null, '')
     .max(255),
   dateOfBirth: MySchemaValidator.string()
-    .pattern(REGEXUSDATE)
+    .pattern(regexUSDate)
     .optional()
     .allow(null, ''),
   department: MySchemaValidator.string()
-    .pattern(REGEXTEXTANDNUMBERS)
+    .pattern(regexTextAndNumbers)
     .optional()
     .allow(null, '')
     .max(255),
   firstName: MySchemaValidator.string()
-    .pattern(REGEXTEXT)
+    .pattern(regexText)
     .optional()
     .allow(null, '')
     .max(255),
   lastName: MySchemaValidator.string()
-    .pattern(REGEXTEXT)
+    .pattern(regexText)
     .optional()
     .allow(null, '')
     .max(255),
   startDate: MySchemaValidator.string()
-    .pattern(REGEXUSDATE)
+    .pattern(regexUSDate)
     .optional()
     .allow(null, ''),
   state: MySchemaValidator.string()
-    .pattern(REGEXTEXTANDNUMBERS)
+    .pattern(regexTextAndNumbers)
     .optional()
     .allow(null, '')
     .max(255),
   street: MySchemaValidator.string()
-    .pattern(REGEXTEXTANDNUMBERS)
+    .pattern(regexTextAndNumbers)
     .optional()
     .allow(null, '')
     .max(255),
   zipCode: MySchemaValidator.string()
-    .pattern(REGEXUSZIPCODES)
+    .pattern(regexUSZipCodes)
     .optional()
     .allow(null, '')
     .max(32),

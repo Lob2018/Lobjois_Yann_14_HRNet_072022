@@ -1,5 +1,51 @@
-import { createGlobalStyle } from 'styled-components'
-import colors from '../../utils/style/colors'
+import styled, { createGlobalStyle, keyframes } from 'styled-components'
+import { Link } from 'react-router-dom'
+
+export const colors = {
+  primary: '#42b983',
+  background: '#fff',
+  text: '#2c3e50',
+  white: '#FFF',
+  black: '#000',
+  green: '#008554',
+}
+
+const rotate = keyframes`
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+`
+export const Loader = styled.div`
+  padding: 10px;
+  border: 6px solid ${colors.primary};
+  border-bottom-color: white;
+  border-radius: 22px;
+  animation: ${rotate} 1s infinite linear;
+  height: 0;
+  width: 0;
+  position: fixed;
+  left: calc(50% - 16px);
+  top: calc(50% - 16px);
+  z-index: 9999;
+  box-shadow: 0px 0px 4px rgba(18, 0, 43, 0.5);
+`
+
+export const StyledLink = styled(Link)`
+  text-decoration: none;
+  margin-right: 0.5rem;
+  &:hover {
+    text-decoration: underline;
+  }
+  @media (max-width: 480px) {
+    font-size: 0.85rem;
+    margin-right: 0rem;
+    margin-left: 0.5rem;
+    white-space: nowrap;
+  }
+`
 
 const StyledGlobalStyle = createGlobalStyle`
     html {

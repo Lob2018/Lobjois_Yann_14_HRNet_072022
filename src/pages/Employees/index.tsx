@@ -1,4 +1,4 @@
-import { lazy, useMemo } from 'react'
+import { lazy } from 'react'
 
 import employeesService from '../../components/services/employees.service'
 import styled from 'styled-components'
@@ -29,41 +29,38 @@ function Employees() {
     }
   }
 
-  return useMemo(
-    () => (
-      <main className="main bg-dark">
-        <div className="header">
-          <StyledH1>Current Employees</StyledH1>
-          <MUIDataTable
-            title={''}
-            data={employees.map((el) => Object.values(el))}
-            columns={[
-              'First Name',
-              'Last Name',
-              'Start Date',
-              'Department',
-              'Date of Birth',
-              'Street',
-              'City',
-              'State',
-              'Zip Code',
-            ]}
-            options={{
-              textLabels: {
-                body: {
-                  noMatch: 'No data available in table',
-                },
+  return (
+    <main className="main bg-dark">
+      <div className="header">
+        <StyledH1>Current Employees</StyledH1>
+        <MUIDataTable
+          title={''}
+          data={employees.map((el) => Object.values(el))}
+          columns={[
+            'First Name',
+            'Last Name',
+            'Start Date',
+            'Department',
+            'Date of Birth',
+            'Street',
+            'City',
+            'State',
+            'Zip Code',
+          ]}
+          options={{
+            textLabels: {
+              body: {
+                noMatch: 'No data available in table',
               },
-              filter: true,
-              filterType: 'dropdown',
-              responsive: 'standard',
-              rowsPerPageOptions: [],
-            }}
-          />
-        </div>
-      </main>
-    ),
-    [employees]
+            },
+            filter: true,
+            filterType: 'dropdown',
+            responsive: 'standard',
+            rowsPerPageOptions: [],
+          }}
+        />
+      </div>
+    </main>
   )
 }
 

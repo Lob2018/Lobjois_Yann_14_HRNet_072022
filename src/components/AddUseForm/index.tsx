@@ -17,11 +17,14 @@ import Dropdown from 'react-dropdown-component-library'
 import STATES from '../../data/states'
 import DEPARTMENTS from '../../data/departments'
 
-import REGEXUSDATE from '../../utils/regex/regexUSDate'
-import REGEXTEXT from '../../utils/regex/regexText'
-import REGEXTEXTANDNUMBERS from '../../utils/regex/regexTextAndNumbers'
-import REGEXUSZIPCODES from '../../utils/regex/regexUSZipCodes'
-import DATEFORMATMMDDYYYY from '../../utils/date/formatMMDDYYYY'
+import {
+  regexUSDate,
+  regexText,
+  regexTextAndNumbers,
+  regexUSZipCodes,
+} from '../../utils/regex'
+
+import { DateFormetMmDdYyyy } from '../../utils/date'
 
 import MyDatePicker from '../../components/MyDatePicker'
 import MyModal from '../../components/MyModal'
@@ -105,14 +108,14 @@ function AddUseForm() {
 
   const controlCustomValue = (name: string, value: Date | string) => {
     if (typeof value === 'string') {
-      if (value.length >= 255 || !value.match(REGEXTEXTANDNUMBERS)) {
+      if (value.length >= 255 || !value.match(regexTextAndNumbers)) {
         setError('department', {})
       } else clearErrors('department')
       setDepartmentValue(value ? value : '')
       return
     }
     if (
-      value.toLocaleDateString('en-US', DATEFORMATMMDDYYYY).match(REGEXUSDATE)
+      value.toLocaleDateString('en-US', DateFormetMmDdYyyy).match(regexUSDate)
     ) {
       clearErrors(name)
     } else setError(name, {})
@@ -136,12 +139,12 @@ function AddUseForm() {
   const onSubmit = async (data: Record<string, string>) => {
     const city = data.city || ''
     const dateOfBirth =
-      dateOfBirthPicker.toLocaleDateString('en-US', DATEFORMATMMDDYYYY) || ''
+      dateOfBirthPicker.toLocaleDateString('en-US', DateFormetMmDdYyyy) || ''
     const department = departmentValue || ''
     const firstName = data.firstName || ''
     const lastName = data.lastName || ''
     const startDate =
-      startDatePicker.toLocaleDateString('en-US', DATEFORMATMMDDYYYY) || ''
+      startDatePicker.toLocaleDateString('en-US', DateFormetMmDdYyyy) || ''
     const state = stateValue || ''
     const street = data.street || ''
     const zipCode = data.zipCode || ''
@@ -193,7 +196,7 @@ function AddUseForm() {
               {...register('firstName', {
                 required: false,
                 maxLength: 255,
-                pattern: REGEXTEXT,
+                pattern: regexText,
               })}
             />
             {errors.firstName ? (
@@ -211,7 +214,7 @@ function AddUseForm() {
               {...register('lastName', {
                 required: false,
                 maxLength: 255,
-                pattern: REGEXTEXT,
+                pattern: regexText,
               })}
             />
             {errors.lastName ? (
@@ -257,7 +260,7 @@ function AddUseForm() {
                 {...register('street', {
                   required: false,
                   maxLength: 255,
-                  pattern: REGEXTEXTANDNUMBERS,
+                  pattern: regexTextAndNumbers,
                 })}
               />
               {errors.street ? (
@@ -275,7 +278,7 @@ function AddUseForm() {
                 {...register('city', {
                   required: false,
                   maxLength: 255,
-                  pattern: REGEXTEXT,
+                  pattern: regexText,
                 })}
               />
               {errors.city ? (
@@ -311,7 +314,7 @@ function AddUseForm() {
                 {...register('zipCode', {
                   required: false,
                   maxLength: 32,
-                  pattern: REGEXUSZIPCODES,
+                  pattern: regexUSZipCodes,
                 })}
               />
               {errors.zipCode ? (

@@ -1,9 +1,9 @@
 import styled from 'styled-components'
-import colors from '../../utils/style/colors'
+import { colors } from '../../utils/style/GlobalStyle'
 import error404 from '../../assets/404.svg'
 
 const ErrorWrapper = styled.div`
-  min-height:100%;
+  min-height: 100%;
   margin: 30px;
   display: flex;
   flex-direction: column;

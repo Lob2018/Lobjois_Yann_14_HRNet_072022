@@ -23,13 +23,25 @@ root.render(
       <Provider store={store}>
         <GlobalStyle />
         <Header />
-        <Suspense fallback={null}>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/employees" element={<Employees />} />
-            <Route path="*" element={<Errors />} />
-          </Routes>
-        </Suspense>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route
+            path="/employees"
+            element={
+              <Suspense fallback={null}>
+                <Employees />{' '}
+              </Suspense>
+            }
+          />
+          <Route
+            path="*"
+            element={
+              <Suspense fallback={null}>
+                <Errors />{' '}
+              </Suspense>
+            }
+          />
+        </Routes>
         <Footer />
       </Provider>
     </Router>

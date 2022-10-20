@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { StyledLink } from '../../utils/style/Atoms'
+import { StyledLink } from '../../utils/style/GlobalStyle'
 
 const LogoStyled = styled.div`
   font-size: 1.5em;
