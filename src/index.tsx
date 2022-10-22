@@ -29,7 +29,7 @@ root.render(
             path="/employees"
             element={
               <Suspense fallback={null}>
-                <Employees />{' '}
+                <Employees />
               </Suspense>
             }
           />
@@ -37,7 +37,7 @@ root.render(
             path="*"
             element={
               <Suspense fallback={null}>
-                <Errors />{' '}
+                <Errors />
               </Suspense>
             }
           />

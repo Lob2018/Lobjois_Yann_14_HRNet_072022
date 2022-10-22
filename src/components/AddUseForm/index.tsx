@@ -11,8 +11,6 @@ import * as loadingActions from '../../features/loading'
 import * as employeesActions from '../../features/employees'
 import * as modalCreateEmployeeActions from '../../features/modalCreateEmployee'
 
-import Employee from '../../classes/employee.class'
-
 import Dropdown from 'react-dropdown-component-library'
 import STATES from '../../data/states'
 import DEPARTMENTS from '../../data/departments'
@@ -151,7 +149,7 @@ function AddUseForm() {
     // joi validation
     checkAccountValidity(true)
     try {
-      const employee = new Employee(
+      const employee = {
         firstName,
         lastName,
         startDate,
@@ -160,8 +158,8 @@ function AddUseForm() {
         street,
         city,
         state,
-        zipCode
-      )
+        zipCode,
+      }
       // joi's corresponding schema, with code splitting, loading on submit (CRA dynamic import)
       const { schema } = await import('../../components/MySchemaValidator')
       await schema.validateAsync(employee)
