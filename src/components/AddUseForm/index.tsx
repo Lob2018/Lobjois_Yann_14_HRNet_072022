@@ -107,9 +107,8 @@ function AddUseForm() {
   const controlCustomValue = (name: string, value: Date | string) => {
     if (typeof value === 'string') {
       if (value.length >= 255 || !value.match(regexTextAndNumbers)) {
-        setError('department', {})
-      } else clearErrors('department')
-      setDepartmentValue(value ? value : '')
+        setError(name, {})
+      } else clearErrors(name)
       return
     }
     if (
@@ -117,7 +116,6 @@ function AddUseForm() {
     ) {
       clearErrors(name)
     } else setError(name, {})
-    setDateOfBirthPicker(value ? value : new Date())
   }
 
   // message for invalid credentials
