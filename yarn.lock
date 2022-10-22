@@ -8020,10 +8020,10 @@ react-dom@^18.2.0:
     loose-envify "^1.1.0"
     scheduler "^0.23.0"
 
-react-dropdown-component-library@^0.2.1:
-  version "0.2.1"
-  resolved "https://registry.yarnpkg.com/react-dropdown-component-library/-/react-dropdown-component-library-0.2.1.tgz#d78f584fc948041a6b08dbc2f66b2c34cbac7b01"
-  integrity sha512-nCDxw2xuMaX6etgkVIZ4CHsNkaChHBhihSYYlt9+LXX5FzUcWeWONgs8HF8qm5TByZVu39+MPEvpKLyP9SbfZQ==
+react-dropdown-component-library@^0.3.1:
+  version "0.3.1"
+  resolved "https://registry.yarnpkg.com/react-dropdown-component-library/-/react-dropdown-component-library-0.3.1.tgz#144de3054124d720d199085d063036ef2fc1b79a"
+  integrity sha512-zGfIqETUt4F6IKY1kTTha61rjabGeDX3g4A5ogOSrn8M8/bWkupuUB5fQGBZQnkxj2BU41bBgVT+z+kradptWQ==
 
 react-error-overlay@^6.0.11:
   version "6.0.11"
