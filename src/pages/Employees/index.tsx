@@ -1,4 +1,4 @@
-import { lazy } from 'react'
+import { lazy, useEffect } from 'react'
 
 import employeesService from '../../components/services/employees.service'
 import styled from 'styled-components'
@@ -20,6 +20,13 @@ const StyledH1 = styled.h1`
 
 function Employees() {
   const dispatch = useDispatch()
+
+  useEffect(() => {
+    const el = document.querySelectorAll('span[role="button"]')
+    el.forEach((span) => {
+      span.setAttribute('aria-hidden', 'true')
+    })
+  }, [])
 
   const employees = useSelector(selectEmployees)
   if (!employees.length) {
@@ -51,6 +58,8 @@ function Employees() {
             textLabels: {
               body: {
                 noMatch: 'No data available in table',
+                toolTip: 'Sort',
+                columnHeaderTooltip: (column) => `Sort for ${column.label}`,
               },
             },
             filter: false,
